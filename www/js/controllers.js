@@ -4,6 +4,7 @@ angular.module('starter.controllers', ['ionic'])
 	$scope.startTest = function(){$state.go('test')};
 	$scope.pastResults = function(){$state.go('pastresults')};
 	$scope.updateInformation = function(){$state.go('information')};
+	$scope.scheduleTest=function(){$state.go('scheduler')};
 })
 
 .controller('TestCtrl', function($scope,$state){
@@ -21,5 +22,9 @@ angular.module('starter.controllers', ['ionic'])
 })
 
 .controller('InformationCtrl', function($scope,$state){
+	$scope.returnToMain = function(){$state.go('mainmenu')};
+})
+
+.controller('SchedulerCtrl', function($scope,$state){
 	$scope.returnToMain = function(){$state.go('mainmenu')};
 })

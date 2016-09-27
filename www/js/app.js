@@ -40,7 +40,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   })
 
   .state('testresult', {
-    url: '/testresult/:testresultID',
+    url: '/testresult',
     templateUrl: 'templates/testresult.html',
     controller: 'TestResultCtrl'
   })
@@ -55,6 +55,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     url: '/pastresults',
     templateUrl: 'templates/pastresults.html',
     controller: 'PastResultsCtrl'
+  })
+
+  .state('scheduler',{
+    url: '/scheduler',
+    templateUrl: 'templates/scheduler.html',
+    controller: 'SchedulerCtrl'
   })
 
 
