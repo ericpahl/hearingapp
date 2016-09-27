@@ -13,6 +13,7 @@ angular.module('starter.controllers', ['ionic'])
 
 .controller('PastResultsCtrl', function($scope,$state){
 	$scope.returnToMain = function(){$state.go('mainmenu')};
+	$scope.results = [{date:"9/22/16", score:"42"},{date:"9/13/16",score:"37"},{date:"8/22/16",score:"39"}];
 })
 
 .controller('TestResultCtrl', function($scope,$state){
