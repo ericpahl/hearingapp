@@ -22,7 +22,7 @@ Overall Trend</div>
 <h3 style="color:#33cd5f;"><u>Past Results</u></h3>
 </center>
 <ion-list>
-	<ion-item ng-repeat="result in $storage.results" style="height:50px" href="#/testresult/{{result.id}}">
+	<ion-item ng-repeat="result in $storage.results" style="height:50px" href="#/testresult/{{result.id}}" ng-click="goToResult()">
 	<p style="text-align:left;">
 {{result.date}}
 <span style="float:right;">{{result.score}} dB</span>

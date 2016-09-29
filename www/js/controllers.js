@@ -7,10 +7,11 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage'])
 	$scope.scheduleTest=function(){$state.go('scheduler')};
 })
 
-.controller('TestCtrl', function($scope,$state){
+.controller('TestCtrl', function($scope,$state,$localStorage){
 	$scope.returnToMain = function(){$state.go('mainmenu')};
 	 // $scope.finishTest = function(){$state.go('testresult')};
-	 $scope.finishTest=function(){window.location="#/testresult/0"}
+
+	 $scope.finishTest=function(){ delete $localStorage.pastResult; window.location="#/testresult/0";}
 })
 
 .controller('PastResultsCtrl', function($scope,$state,$localStorage){
@@ -25,8 +26,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage'])
 	{id:1, date:"9/13/16",score:"37",data:[65, 20, 30, 81, 40, 55, 10]},
 	{id:2,date:"8/22/16",score:"39",data:[80, 76, 80, 81, 87, 90, 88]}];
 	$scope.$storage=$localStorage;
-	$scope.updateThreshold=function(result){$localStorage.threshold="result.score"};
-
+	$scope.goToResult=function(){$localStorage.pastResult="notnull";};
 })
 
 .controller('TestResultCtrl', function($scope,$stateParams,$localStorage,$state){
@@ -34,6 +34,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage'])
     $scope.series = ['Series A'];
     $scope.lineOptions ={ elements : { line : { tension : 0 } }};
 	$scope.returnToMain = function(){$state.go('mainmenu')};
+	$scope.returnToPastResults=function(){$state.go('pastresults')};
 	$scope.$storage=$localStorage;
 	$scope.result=$localStorage.results[$stateParams.resultID];
 	$scope.data=[$scope.result.data];
