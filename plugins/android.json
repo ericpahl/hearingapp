@@ -13,6 +13,12 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
         },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+        },
+        "cordova-plugin-nativeaudio": {
+            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+        },
         "cordova-plugin-splashscreen": {
             "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
         },
@@ -26,5 +32,12 @@
             "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+        }
+    }
 }

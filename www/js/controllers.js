@@ -11,6 +11,13 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage'])
 	$scope.returnToMain = function(){$state.go('mainmenu')};
 	 // $scope.finishTest = function(){$state.go('testresult')};
 
+	var sound = new Howl({
+	  src: ['js/440Hz-5Sec.mp3']
+	});
+	sound.play();
+	 //var audio = new Audio('js/440Hz-5Sec.mp3');
+	 //audio.play();
+
 	 $scope.finishTest=function(){ delete $localStorage.pastResult; window.location="#/testresult/0";}
 })
 
@@ -48,3 +55,4 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage'])
 
 	$scope.returnToMain = function(){$state.go('mainmenu')};
 })
+
