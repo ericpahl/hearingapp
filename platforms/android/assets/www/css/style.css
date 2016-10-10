@@ -1,5 +1,40 @@
-/* Empty. Add your own CSS if you like */
 button.playbutton{
 	font-size:100px;
-	color:#33cd5f;
+	color:#11c1f3;
+}
+
+ion-content{
+	background-color: #FFFFFF
+}
+
+h1{
+	text-align:center;
+	color:#000000;
+}
+
+
+h3{
+	text-align:center;
+	color:#000000;
+}
+
+button.button-calm.button-block.icon{
+	font-size:25px;
+	height:30px;
+}
+
+input{
+	
+	width:50px;
+	font-size:20px;
+	text-align:center;
+	color:#000000;
+}
+
+span{
+	float:right;
+}
+
+div.bar.bar-header{
+	text-align:center;
 }

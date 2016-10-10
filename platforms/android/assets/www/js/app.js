@@ -34,7 +34,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js', 'ngStorag
   })
 
   .state('test', {
-    url: 'test',
+    url: '/test',
     templateUrl: 'templates/test.html',
     controller: 'TestCtrl'
   })

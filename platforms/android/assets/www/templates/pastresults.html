@@ -1,34 +1,33 @@
-<ion-content style="background-color: #0033cc">
-<div style="height:20px"></div>
-<center>
-<h2 style="color:#33cd5f;">Results</h2>
-</center>
-<div class="card">
-<div class="item item-divider">
-Overall Trend</div>
+<ion-content>
+    
+    <div class="bar bar-header bar-stable">
+        <button class = "button button-icon icon ion-home" ng-click="returnToMain()"></button>
+        <h1 class = "title">Past Results</h1>
+    </div>
+    <div style="height:40px"></div>
+    <div class="card">
+        <div class="item item-divider">
+            Overall Trend
+        </div>
         <div class="item item-text-wrap">
             <div class="panel-body">
-    	<canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" series="series"></canvas>
-  </div>
+            	<canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" series="series"></canvas>
+            </div>
         </div>
     </div>
-	<h3 style="text-align:left;color:#33cd5f">
-&nbspAverage Threshold:
-<span style="float:right;">42 dB&nbsp</span>
-</h3>
-<div style="height:20px";></div>
-<center>
-<button class="button button-balanced" ng-click="returnToMain()">Return to Main Menu</button>
-<h3 style="color:#33cd5f;"><u>Past Results</u></h3>
-</center>
-<ion-list>
-	<ion-item ng-repeat="result in $storage.results" style="height:50px" href="#/testresult/{{result.id}}" ng-click="goToResult()">
-	<p style="text-align:left;">
-{{result.date}}
-<span style="float:right;">{{result.score}} dB</span>
-</p>
-</div>
-	</ion-item>
-</ion-list>
+    <h3 style="text-align:left;">
+        &nbspAverage Threshold:
+        <span style="float:right;">42 dB&nbsp</span>
+    </h3>
+    <div style="height:20px";></div>
 
+    <ion-list>
+    	<ion-item ng-repeat="result in $storage.results" style="height:50px" href="#/testresult/{{result.id}}" ng-click="goToResult()">
+        	<p style="text-align:left;">
+                {{result.date}}
+                <span>{{result.score}} dB</span>
+            </p>
+        </div>
+        </ion-item>
+    </ion-list>
 </ion-content>

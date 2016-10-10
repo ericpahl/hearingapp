@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['ionic','chart.js','ngStorage'])
+angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova'])
 
 .controller('MainMenuCtrl', function($scope,$state){
 	$scope.startTest = function(){$state.go('test')};
@@ -7,18 +7,16 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage'])
 	$scope.scheduleTest=function(){$state.go('scheduler')};
 })
 
-.controller('TestCtrl', function($scope,$state,$localStorage){
+.controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
 	$scope.returnToMain = function(){$state.go('mainmenu')};
-	 // $scope.finishTest = function(){$state.go('testresult')};
-
-	var sound = new Howl({
-	  src: ['js/440Hz-5Sec.mp3']
-	});
-	sound.play();
-	 //var audio = new Audio('js/440Hz-5Sec.mp3');
-	 //audio.play();
-
-	 $scope.finishTest=function(){ delete $localStorage.pastResult; window.location="#/testresult/0";}
+	$scope.playSound=function(){
+		$ionicPlatform.ready(function(){
+			var media = new Media('/android_asset/www/js/440Hz-5sec.mp3');
+		    media.play();
+	    });
+	};
+	
+	 $scope.finishTest=function(){ delete $localStorage.pastResult; window.location="#/testresult/0";};
 })
 
 .controller('PastResultsCtrl', function($scope,$state,$localStorage){
@@ -54,5 +52,5 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage'])
 .controller('SchedulerCtrl', function($scope,$state){
 
 	$scope.returnToMain = function(){$state.go('mainmenu')};
-})
+});
 
