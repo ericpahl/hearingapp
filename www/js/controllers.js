@@ -11,7 +11,15 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	$scope.returnToMain = function(){$state.go('mainmenu')};
 	$scope.playSound=function(){
 		$ionicPlatform.ready(function(){
-			var media = new Media('/android_asset/www/js/440Hz-5sec.mp3');
+			if(ionic.Platform.isAndroid()){
+				var media = new Media('/android_asset/www/js/440Hz-5sec.mp3');
+			}
+			else if(ionic.Platform.isIOS()){
+				var media = new Media('js/440Hz-5sec.mp3');
+			}
+			else{
+				var media = new Audio('js/440Hz-5sec.mp3')
+			}
 		    media.play();
 	    });
 	};
