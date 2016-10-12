@@ -26,12 +26,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js', 'ngStorag
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
+    .state('login',{
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: "LoginCtrl"
+    })
 
   .state('mainmenu', {
     url: '/mainmenu',
     templateUrl: 'templates/mainmenu.html',
-    controller: 'MainMenuCtrl'
-  })
+    controller: 'MainMenuCtrl',
+    })
 
   .state('test', {
     url: '/test',
