@@ -20,23 +20,23 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 })
 
 .controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
-	$scope.returnToMain = function(){$state.go('mainmenu')};
+	$scope.returnToMain = function(){$scope.media.pause(); $state.go('mainmenu')};
 	$scope.playSound=function(){
 		$ionicPlatform.ready(function(){
 			if(ionic.Platform.isAndroid()){
-				var media = new Media('/android_asset/www/js/440Hz-5sec.mp3');
+				$scope.media = new Media('/android_asset/www/js/440Hz-5sec.mp3');
 			}
 			else if(ionic.Platform.isIOS()){
-				var media = new Media('js/440Hz-5sec.mp3');
+				$scope.media = new Media('js/440Hz-5sec.mp3');
 			}
 			else{
-				var media = new Audio('js/440Hz-5sec.mp3')
+				$scope.media = new Audio('js/440Hz-5sec.mp3')
 			}
-		    media.play();
+		    $scope.media.play();
 	    });
 	};
 	
-	 $scope.finishTest=function(){ delete $localStorage.pastResult; window.location="#/testresult/0";};
+	 $scope.finishTest=function(){ $scope.media.pause(); delete $localStorage.pastResult; window.location="#/testresult/0";};
 })
 
 .controller('PastResultsCtrl', function($scope,$state,$localStorage){
@@ -134,8 +134,14 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 					document.getElementById("myDate").value=document.getElementById("myDate").defaultValue;
 				});
 			}
-			$scope.successMessage="Scheduled test on " + $scope.startDate.toLocaleDateString()+".";
 		});
+	};
+	$scope.goToCalendar=function(){
+		if(ionic.Platform.isAndroid()||ionic.Platform.isIOS()){
+			$ionicPlatform.ready(function(){
+				window.plugins.calendar.openCalendar();
+			});
+		}
 	};
 	$scope.returnToMain = function(){
 		$scope.successMessage=null;
