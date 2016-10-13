@@ -47,6 +47,9 @@
         },
         "cordova-plugin-calendar": {
             "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
         }
     },
     "dependent_plugins": {

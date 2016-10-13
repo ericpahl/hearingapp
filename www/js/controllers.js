@@ -121,6 +121,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				sex: document.getElementById("sex").value,
 				dob: document.getElementById("dob").value
 			});
+		$state.go('mainmenu');
 	};
 })
 
