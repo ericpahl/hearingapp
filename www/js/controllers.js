@@ -121,9 +121,26 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 		}
 		});
 })
-.controller('SchedulerCtrl', function($scope,$state){
-
-	$scope.returnToMain = function(){$state.go('mainmenu')};
+.controller('SchedulerCtrl', function($scope,$state,$ionicPlatform){
+	$scope.scheduleTest=function(){
+		$ionicPlatform.ready(function(){
+			$scope.startDate = new Date(document.getElementById("myDate").value);
+			var offset=$scope.startDate.getTimezoneOffset();
+			$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000);
+			var endDate = new Date(Date.parse($scope.startDate)+86400000);
+			if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
+				window.plugins.calendar.createEvent("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
+					$scope.successMessage="Scheduled test on " + $scope.startDate.toLocaleDateString()+".";
+					document.getElementById("myDate").value=document.getElementById("myDate").defaultValue;
+				});
+			}
+			$scope.successMessage="Scheduled test on " + $scope.startDate.toLocaleDateString()+".";
+		});
+	};
+	$scope.returnToMain = function(){
+		$scope.successMessage=null;
+		$state.go('mainmenu');
+	};
 })
 
 
