@@ -9,22 +9,21 @@
   <div class="list">
     <label class="item item-input">
       <span class="input-label">First Name</span>
-      <input type="text">
+      <input id="firstname" type="text">
     </label>
     <label class="item item-input">
       <span class="input-label">Last Name</span>
-      <input type="text">
+      <input id="lastname" type="text">
     </label>
       <label class="item item-input">
       <span class="input-label">Date of Birth:</span>
-      <input type="date"></input>
+      <input id="dob" type="date"></input>
     </label>
     <div class="list">
-      <label class="item item-input item-select">
+      <label  class="item item-input item-select">
         <div class="input-label">
           Sex:
-        </div>
-        <select>
+        <select id="sex">
           <option>Male</option>
           <option>Female</option>
         </select>
@@ -32,7 +31,7 @@
     </div>
   </div>
   <center>
-    <button class="button button-calm button-block" ng-click="returnToMain()">Save</button>
+    <button class="button button-calm button-block" ng-click="saveInfo()">Save</button>
     <button class="button button-calm button-block" ng-click="logOut()">Sign Out</button>
   </center>
 </ion-content>

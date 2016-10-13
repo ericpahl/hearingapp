@@ -20,7 +20,12 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 })
 
 .controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
-	$scope.returnToMain = function(){$scope.media.pause(); $state.go('mainmenu')};
+	$scope.returnToMain = function(){
+		if($scope.media){
+			$scope.media.pause(); 
+		}
+		$state.go('mainmenu')
+	};
 	$scope.playSound=function(){
 		$ionicPlatform.ready(function(){
 			if(ionic.Platform.isAndroid()){
@@ -36,7 +41,13 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	    });
 	};
 	
-	 $scope.finishTest=function(){ $scope.media.pause(); delete $localStorage.pastResult; window.location="#/testresult/0";};
+	 $scope.finishTest=function(){ 
+	 	if($scope.media){
+			$scope.media.pause(); 
+		} 
+	 	delete $localStorage.pastResult; 
+	 	window.location="#/testresult/0";
+	 };
 })
 
 .controller('PastResultsCtrl', function($scope,$state,$localStorage){
@@ -88,6 +99,28 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	$scope.logOut=function(){
 		firebase.auth().signOut();
 		window.location="#/login";
+	};
+	firebase.auth().onAuthStateChanged(function(){
+		$scope.userID=firebase.auth().currentUser.uid;
+		var infoRef=firebase.database().ref('users/'+$scope.userID+'/information');
+		infoRef.on('value',function(snapshot){
+			$scope.info=snapshot.val();
+			if($scope.info){
+				document.getElementById("firstname").value=$scope.info.firstname;
+				document.getElementById("lastname").value=$scope.info.lastname;
+				document.getElementById("sex").value=$scope.info.sex;
+				document.getElementById("dob").value=$scope.info.dob;
+			}
+		})
+	});
+	$scope.saveInfo = function(){
+		firebase.database().ref('users/'+$scope.userID+'/information').set(
+			{
+				firstname: document.getElementById("firstname").value, 
+				lastname: document.getElementById("lastname").value,
+				sex: document.getElementById("sex").value,
+				dob: document.getElementById("dob").value
+			});
 	};
 })
 
