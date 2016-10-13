@@ -111,7 +111,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				document.getElementById("sex").value=$scope.info.sex;
 				document.getElementById("dob").value=$scope.info.dob;
 			}
-		})
+		});
 	});
 	$scope.saveInfo = function(){
 		firebase.database().ref('users/'+$scope.userID+'/information').set(
