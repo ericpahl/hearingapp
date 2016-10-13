@@ -39,6 +39,9 @@
     <feature name="Calendar">
         <param name="android-package" value="nl.xservices.plugins.Calendar" />
     </feature>
+    <feature name="Geolocation">
+        <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
+    </feature>
     <name>HearingApp</name>
     <description>
         An Ionic Framework and Cordova project.
@@ -46,7 +49,7 @@
     <author email="you@example.com" href="http://example.com.com/">
       Your Name Here
     </author>
-    <content original-src="index.html" src="http://192.168.100.102:8100" />
+    <content original-src="index.html" src="http://172.17.43.72:8100" />
     <access origin="*" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
@@ -62,7 +65,4 @@
     <preference name="FadeSplashScreenDuration" value="2000" />
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />
-    <feature name="Geolocation">
-        <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
-    </feature>
 </widget>

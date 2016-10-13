@@ -20,23 +20,35 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 })
 
 .controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
-	$scope.returnToMain = function(){$state.go('mainmenu')};
+	$scope.returnToMain = function(){
+		if($scope.media){
+			$scope.media.pause(); 
+		}
+		$state.go('mainmenu')
+	};
 	$scope.playSound=function(){
 		$ionicPlatform.ready(function(){
-			if(ionic.Platform.isAndroid()){
-				var media = new Media('/android_asset/www/js/440Hz-5sec.mp3');
-			}
-			else if(ionic.Platform.isIOS()){
-				var media = new Media('js/440Hz-5sec.mp3');
-			}
-			else{
-				var media = new Audio('js/440Hz-5sec.mp3')
-			}
-		    media.play();
+			var ref = firebase.storage().ref('Audio');
+			ref.child('/FAC_1A.wav').getDownloadURL().then(function(url){
+				if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+				{
+					$scope.media=new Media(url);
+				}
+				else{
+					$scope.media = new Audio(url);
+				}
+				$scope.media.play();
+			});
 	    });
 	};
 	
-	 $scope.finishTest=function(){ delete $localStorage.pastResult; window.location="#/testresult/0";};
+	 $scope.finishTest=function(){ 
+	 	if($scope.media){
+			$scope.media.pause(); 
+		} 
+	 	delete $localStorage.pastResult; 
+	 	window.location="#/testresult/0";
+	 };
 })
 
 .controller('PastResultsCtrl', function($scope,$state,$localStorage){
@@ -89,6 +101,29 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 		firebase.auth().signOut();
 		window.location="#/login";
 	};
+	firebase.auth().onAuthStateChanged(function(){
+		$scope.userID=firebase.auth().currentUser.uid;
+		var infoRef=firebase.database().ref('users/'+$scope.userID+'/information');
+		infoRef.on('value',function(snapshot){
+			$scope.info=snapshot.val();
+			if($scope.info){
+				document.getElementById("firstname").value=$scope.info.firstname;
+				document.getElementById("lastname").value=$scope.info.lastname;
+				document.getElementById("sex").value=$scope.info.sex;
+				document.getElementById("dob").value=$scope.info.dob;
+			}
+		});
+	});
+	$scope.saveInfo = function(){
+		firebase.database().ref('users/'+$scope.userID+'/information').set(
+			{
+				firstname: document.getElementById("firstname").value, 
+				lastname: document.getElementById("lastname").value,
+				sex: document.getElementById("sex").value,
+				dob: document.getElementById("dob").value
+			});
+		$state.go('mainmenu');
+	};
 })
 
 .controller('LoginCtrl',function($scope,$state,$cordovaOauth){
@@ -124,15 +159,26 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 .controller('SchedulerCtrl', function($scope,$state,$ionicPlatform){
 	$scope.scheduleTest=function(){
 		$ionicPlatform.ready(function(){
-			var startDate = new Date(document.getElementById("myDate").value);
-			var offset=startDate.getTimezoneOffset();
-			startDate=new Date(Date.parse(startDate)+offset*60000);
-			var endDate = new Date(Date.parse(startDate)+86400000);
-			window.plugins.calendar.createEvent("HearMe Test","HearMe App","Test your hearing in the HearMe app.",startDate,endDate,function(){
-				$scope.successMessage="Scheduled test on" + startDate.toString();
-				document.getElementById("myDate").value=document.getElementById("myDate").defaultValue;
-			});
+			$scope.startDate = new Date(document.getElementById("myDate").value);
+			$scope.successMessage=null;
+			var offset=$scope.startDate.getTimezoneOffset();
+			$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000);
+			var endDate = new Date(Date.parse($scope.startDate)+86400000);
+			if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
+				window.plugins.calendar.createEvent("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
+					$scope.successMessage=$scope.startDate.toLocaleDateString()+".";
+					document.getElementById("myDate").value=document.getElementById("myDate").defaultValue;
+					$scope.$apply();
+				});
+			}
 		});
+	};
+	$scope.goToCalendar=function(){
+		if(ionic.Platform.isAndroid()||ionic.Platform.isIOS()){
+			$ionicPlatform.ready(function(){
+				window.plugins.calendar.openCalendar();
+			});
+		}
 	};
 	$scope.returnToMain = function(){
 		$scope.successMessage=null;

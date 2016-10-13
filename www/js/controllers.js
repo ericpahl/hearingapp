@@ -23,27 +23,30 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	$scope.returnToMain = function(){
 		if($scope.media){
 			$scope.media.pause(); 
+			$scope.media = null;
 		}
 		$state.go('mainmenu')
 	};
 	$scope.playSound=function(){
 		$ionicPlatform.ready(function(){
-			if(ionic.Platform.isAndroid()){
-				$scope.media = new Media('/android_asset/www/js/440Hz-5sec.mp3');
-			}
-			else if(ionic.Platform.isIOS()){
-				$scope.media = new Media('js/440Hz-5sec.mp3');
-			}
-			else{
-				$scope.media = new Audio('js/440Hz-5sec.mp3')
-			}
-		    $scope.media.play();
+			var ref = firebase.storage().ref('Audio');
+			ref.child('/FAC_1A.wav').getDownloadURL().then(function(url){
+				if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+				{
+					$scope.media=new Media(url);
+				}
+				else{
+					$scope.media = new Audio(url);
+				}
+				$scope.media.play();
+			});
 	    });
 	};
 	
 	 $scope.finishTest=function(){ 
 	 	if($scope.media){
 			$scope.media.pause(); 
+			$scope.media=null;
 		} 
 	 	delete $localStorage.pastResult; 
 	 	window.location="#/testresult/0";
@@ -175,13 +178,19 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	$scope.goToCalendar=function(){
 		if(ionic.Platform.isAndroid()||ionic.Platform.isIOS()){
 			$ionicPlatform.ready(function(){
-				window.plugins.calendar.openCalendar();
+				if($scope.startDate){
+					window.plugins.calendar.openCalendar($scope.startDate);
+				}
+				else{
+					window.plugins.calendar.openCalendar();
+				}
 			});
 		}
 	};
 	$scope.returnToMain = function(){
 		$scope.successMessage=null;
 		$state.go('mainmenu');
+		$scope.startDate=null;
 	};
 })
 
