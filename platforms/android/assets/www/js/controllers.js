@@ -1,13 +1,6 @@
-angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova','firebase'])
+angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova','firebase','ngCordovaOauth'])
 
-.controller('MainMenuCtrl', function($scope,$state){
-	firebase.auth().onAuthStateChanged(function(user){
-		if(!user)
-		{
-			var provider = new firebase.auth.GoogleAuthProvider();
-			firebase.auth().signInWithRedirect(provider);
-		}
-	})
+.controller('MainMenuCtrl', function($scope,$state,Auth){
 	$scope.startTest = function(){$state.go('test')};
 	$scope.pastResults = function(){$state.go('pastresults')};
 	$scope.updateInformation = function(){$state.go('information')};
@@ -76,43 +69,44 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	$scope.data=[$scope.result.data];
 })
 
-.controller('InformationCtrl', function($scope,$state){
+.controller('InformationCtrl', function($scope,$state,$cordovaOauth){
 	$scope.returnToMain = function(){$state.go('mainmenu')};
 	$scope.logOut=function(){
 		firebase.auth().signOut();
-		window.location="#/mainmenu";
+		window.location="#/login";
 	};
 })
 
+.controller('LoginCtrl',function($scope,$state,$cordovaOauth){
+	$scope.login=function(){
+		if(!firebase.auth().currentUser)
+		{
+			if(!ionic.Platform.isAndroid()&&!ionic.Platform.isIOS()){
+	                	var provider = new firebase.auth.GoogleAuthProvider();
+						firebase.auth().signInWithPopup(provider).then(function(){
+							if(firebase.auth().currentUser){
+								$state.go('mainmenu');
+							}
+						});
+	                }
+	                else{
+	                    $cordovaOauth.google("180218637488-t2or73169ubmhbk0or5r027ct86c1ghr.apps.googleusercontent.com",
+	                    	["email", "profile"]).then(function(result){
+	                    		var credential = firebase.auth.GoogleAuthProvider.credential(result.id_token,result.access_token);
+	                    		firebase.auth().signInWithCredential(credential);
+	                    		if(firebase.auth().currentUser){
+	                    			$state.go('mainmenu');
+	                    		}
+	                    	});
+	                }
+		}
+	};
+})
 .controller('SchedulerCtrl', function($scope,$state){
 
 	$scope.returnToMain = function(){$state.go('mainmenu')};
 })
 
-.controller("LoginCtrl", function($scope, $firebaseAuth, $timeout, $state,$localStorage){
-
-  // $scope.user = {};
-
-  // $scope.signIn = function(){
-  //   console.log("$scope.user:" + JSON.stringify($scope.user));
-
-  //   $scope.firebaseUser = null;
-  //   $scope.error = null;
-
-  //   var auth = $firebaseAuth();
-
-  //   auth.$signInWithEmailAndPassword($scope.user.email, $scope.user.password).then(function(firebaseUser) {
-  //     $scope.firebaseUser = firebaseUser;
-  //     $localStorage.user=firebaseUser;
-
-  //     $timeout(function(){
-  //       $state.go('mainmenu');
-  //     }, 2000);
-  //   }).catch(function(error) {
-  //     $scope.error = error;
-  //   });
-  // };
-})
 
 .factory("Auth", ["$firebaseAuth",
   function($firebaseAuth) {

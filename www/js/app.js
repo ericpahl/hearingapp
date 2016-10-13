@@ -26,10 +26,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js', 'ngStorag
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
-    .state('login',{
-      url: '/login',
-      templateUrl: 'templates/login.html',
-      controller: "LoginCtrl"
+  .state('login', {
+    url: '/login',
+    templateUrl: 'templates/login.html',
+    controller: 'LoginCtrl',
     })
 
   .state('mainmenu', {
@@ -70,7 +70,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js', 'ngStorag
 
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/mainmenu');
+  $urlRouterProvider.otherwise('/login');
 });
 
 
