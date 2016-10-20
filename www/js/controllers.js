@@ -21,6 +21,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 
 .controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
 	$scope.returnToMain = function(){
+		$scope.numbers=null;
 		if($scope.media){
 			$scope.media.pause(); 
 			$scope.media = null;
@@ -28,22 +29,58 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 		$state.go('mainmenu')
 	};
 	$scope.playSound=function(){
+		if(!$scope.numbers){
+			$scope.number=$scope.numbers=[7,7,7];
+			while($scope.numbers[0]==7||$scope.numbers[1]==7||$scope.numbers[2]==7){
+				$scope.numbers[0] = Math.floor(Math.random()*9)+1;
+				$scope.numbers[1] = Math.floor(Math.random()*9)+1;
+				$scope.numbers[2] = Math.floor(Math.random()*9)+1;
+			}
+		}
 		$ionicPlatform.ready(function(){
 			var ref = firebase.storage().ref('Audio');
-			ref.child('/FAC_1A.wav').getDownloadURL().then(function(url){
-				if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
-				{
-					$scope.media=new Media(url);
-				}
-				else{
-					$scope.media = new Audio(url);
-				}
-				$scope.media.play();
+			ref.child('FBH_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
+					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+					{
+						$scope.media=new Media(url);
+					}
+					else{
+						$scope.media = new Audio(url);
+						
+					}
+					$scope.media.play();
+				setTimeout(function(){
+					ref.child('FBH_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
+						if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+						{
+							$scope.media=new Media(url);
+						}
+						else{
+							$scope.media = new Audio(url);
+							
+						}
+						$scope.media.play();
+					});
+						setTimeout(function(){
+						ref.child('FBH_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
+							if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+							{
+								$scope.media=new Media(url);
+							}
+							else{
+								$scope.media = new Audio(url);
+								
+							}
+							$scope.media.play();
+						});
+					},500);
+				},500);
 			});
 	    });
 	};
 	
-	 $scope.finishTest=function(){ 
+	 $scope.submit=function(){ 
+	 	$scope.numbers=null;
 	 	if($scope.media){
 			$scope.media.pause(); 
 			$scope.media=null;
@@ -167,17 +204,19 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 .controller('SchedulerCtrl', function($scope,$state,$ionicPlatform){
 	$scope.scheduleTest=function(){
 		$ionicPlatform.ready(function(){
-			$scope.startDate = new Date(document.getElementById("myDate").value);
-			$scope.successMessage=null;
-			var offset=$scope.startDate.getTimezoneOffset();
-			$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000);
-			var endDate = new Date(Date.parse($scope.startDate)+86400000);
-			if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
-				window.plugins.calendar.createEvent("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
-					$scope.successMessage=$scope.startDate.toLocaleDateString()+".";
-					document.getElementById("myDate").value=document.getElementById("myDate").defaultValue;
-					$scope.$apply();
-				});
+			if(document.getElementById("myDate").value){
+				$scope.startDate = new Date(document.getElementById("myDate").value);
+				$scope.successMessage=null;
+				var offset=$scope.startDate.getTimezoneOffset();
+				$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000);
+				var endDate = new Date(Date.parse($scope.startDate)+86400000);
+				if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
+					window.plugins.calendar.createEvent("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
+						$scope.successMessage=$scope.startDate.toLocaleDateString()+".";
+						document.getElementById("myDate").value=document.getElementById("myDate").defaultValue;
+						$scope.$apply();
+					});
+				}
 			}
 		});
 	};

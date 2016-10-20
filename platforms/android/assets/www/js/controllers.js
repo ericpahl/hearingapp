@@ -21,30 +21,43 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 
 .controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
 	$scope.returnToMain = function(){
+		$scope.numbers=null;
 		if($scope.media){
 			$scope.media.pause(); 
+			$scope.media = null;
 		}
 		$state.go('mainmenu')
 	};
 	$scope.playSound=function(){
+		if(!$scope.numbers){
+			while($scope.numbers[1]!=7&&$scope.numbers[2]!=7&&$scope.numbers[3]!=7){
+				$scope.numbers[1] = Math.floor(Math.random()*9)+1;
+				$scope.numbers[2] = Math.floor(Math.random()*9)+1;
+				$scope.numbers[3] = Math.floor(Math.random()*9)+1;
+			}
+		}
 		$ionicPlatform.ready(function(){
 			var ref = firebase.storage().ref('Audio');
-			ref.child('/FAC_1A.wav').getDownloadURL().then(function(url){
-				if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
-				{
-					$scope.media=new Media(url);
-				}
-				else{
-					$scope.media = new Audio(url);
-				}
-				$scope.media.play();
-			});
+			for(int i = 0; i < 3; i++){
+				ref.child('/Female/RawAudio/F'+$scope.numbers[i]+'11.wav').getDownloadURL().then(function(url){
+					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+					{
+						$scope.media=new Media(url);
+					}
+					else{
+						$scope.media = new Audio(url);
+					}
+					$scope.media.play();
+				});
+			}
 	    });
 	};
 	
-	 $scope.finishTest=function(){ 
+	 $scope.submit=function(){ 
+	 	$scope.numbers=null;
 	 	if($scope.media){
 			$scope.media.pause(); 
+			$scope.media=null;
 		} 
 	 	delete $localStorage.pastResult; 
 	 	window.location="#/testresult/0";
@@ -112,6 +125,12 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				document.getElementById("sex").value=$scope.info.sex;
 				document.getElementById("dob").value=$scope.info.dob;
 			}
+			else{
+				document.getElementById("firstname").value="";
+				document.getElementById("lastname").value="";
+				document.getElementById("sex").value="";
+				document.getElementById("dob").value="";
+			}
 		});
 	});
 	$scope.saveInfo = function(){
@@ -176,13 +195,19 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	$scope.goToCalendar=function(){
 		if(ionic.Platform.isAndroid()||ionic.Platform.isIOS()){
 			$ionicPlatform.ready(function(){
-				window.plugins.calendar.openCalendar();
+				if($scope.startDate){
+					window.plugins.calendar.openCalendar($scope.startDate);
+				}
+				else{
+					window.plugins.calendar.openCalendar();
+				}
 			});
 		}
 	};
 	$scope.returnToMain = function(){
 		$scope.successMessage=null;
 		$state.go('mainmenu');
+		$scope.startDate=null;
 	};
 })
 
