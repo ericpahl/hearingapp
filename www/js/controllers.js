@@ -39,6 +39,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 		}
 		$ionicPlatform.ready(function(){
 			var ref = firebase.storage().ref('Audio');
+			setTimeout(function(){
 			ref.child('FBH_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
 					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 					{
@@ -73,9 +74,10 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 							}
 							$scope.media.play();
 						});
-					},500);
-				},500);
+					},750);
+				},750);
 			});
+		},500);
 	    });
 	};
 	
