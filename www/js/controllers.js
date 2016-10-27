@@ -20,6 +20,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 })
 
 .controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
+	$scope.count=0;
 	$scope.returnToMain = function(){
 		$scope.numbers=null;
 		if($scope.media){
@@ -82,13 +83,29 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	};
 	
 	 $scope.submit=function(){ 
-	 	$scope.numbers=null;
-	 	if($scope.media){
-			$scope.media.pause(); 
-			$scope.media=null;
-		} 
-	 	delete $localStorage.pastResult; 
-	 	window.location="#/testresult/0";
+	 	if($scope.numbers&&document.getElementById("guess1").value&&document.getElementById("guess2").value&&document.getElementById("guess3").value){
+	 		$scope.count++;
+	 		if(document.getElementById("guess1").value==$scope.numbers[0]&&document.getElementById("guess2").value==$scope.numbers[1]&&document.getElementById("guess3").value==$scope.numbers[2]){
+
+	 		}
+	 		else{
+
+	 		}
+	 		document.getElementById("guess1").value="";
+	 		document.getElementById("guess2").value="";
+	 		document.getElementById("guess3").value="";
+	 		$scope.numbers=null;
+	 	}
+	 	if($scope.count==24){
+	 		$scope.numbers=null;
+		 	if($scope.media){
+				$scope.media.pause(); 
+				$scope.media=null;
+			} 
+		 	delete $localStorage.pastResult; 
+		 	$scope.count = 0;
+		 	window.location="#/testresult/0";
+	 	}
 	 };
 })
 

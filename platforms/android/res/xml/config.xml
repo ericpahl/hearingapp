@@ -49,7 +49,7 @@
     <author email="you@example.com" href="http://example.com.com/">
       Your Name Here
     </author>
-    <content original-src="index.html" src="http://172.17.2.32:8100" />
+    <content original-src="index.html" src="http://192.168.100.102:8100" />
     <access origin="*" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="webView" value="org.crosswalk.engine.XWalkWebViewEngine" />
