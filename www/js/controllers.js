@@ -83,8 +83,8 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 							}
 							$scope.media.play();
 						});
-					},750);
-				},750);
+					},1000);
+				},1000);
 			});
 		},500);
 	    });
@@ -119,7 +119,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 			$scope.threshold = Math.round(sum/$scope.testResult.data.length*100)/100;
 			firebase.database().ref('users/'+$scope.userID+'/testresults/'+$scope.testResult.id).set($scope.testResult);
 		 	$scope.testResult=null;
-		 	window.location="#/testresult/0";
+		 	window.location="#/testresult/"+$scope.testResult.id;
 	 	}
 	 };
 })

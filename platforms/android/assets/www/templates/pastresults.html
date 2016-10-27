@@ -20,9 +20,9 @@
         <span style="float:right;">{{avgThreshold}} dB&nbsp</span>
     </h3>
     <div style="height:20px";></div>
-
+    <center><h4><u>Past Results</u></h4></center>
     <ion-list>
-    	<ion-item ng-repeat="result in results" style="height:50px" href="#/testresult/{{result.id}}" ng-click="goToResult()">
+    	<ion-item ng-repeat="result in results" ng-if="result" style="height:50px" href="#/testresult/{{result.id}}" ng-click="goToResult()">
         	<p style="text-align:left;">
                 {{result.date}}
                 <span>{{result.score}} dB</span>

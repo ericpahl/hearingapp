@@ -1,10 +1,11 @@
 angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova','firebase','ngCordovaOauth'])
 
-.controller('MainMenuCtrl', function($scope,$state,Auth){
+.controller('MainMenuCtrl', function($scope,$state,Auth,$localStorage){
 	$scope.startTest = function(){$state.go('test')};
 	$scope.pastResults = function(){$state.go('pastresults')};
 	$scope.updateInformation = function(){$state.go('information')};
 	$scope.scheduleTest=function(){$state.go('scheduler')};
+	$localStorage.numOfTestResults=null;
 	firebase.auth().onAuthStateChanged(function(){
 		$scope.userID=firebase.auth().currentUser.uid;
 		firebase.database().ref('users/'+$scope.userID+'/testresults/0').set({
@@ -21,6 +22,10 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 
 .controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
 	$scope.count=0;
+	firebase.auth().onAuthStateChanged(function(){
+		$scope.userID=firebase.auth().currentUser.uid;
+	});
+	var d = new Date(Date.now());
 	$scope.returnToMain = function(){
 		$scope.numbers=null;
 		if($scope.media){
@@ -36,6 +41,9 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				$scope.numbers[0] = Math.floor(Math.random()*9)+1;
 				$scope.numbers[1] = Math.floor(Math.random()*9)+1;
 				$scope.numbers[2] = Math.floor(Math.random()*9)+1;
+			}
+			if(!$scope.testResult){
+				$scope.testResult={id: $localStorage.numOfTestResults+1, date: d.toLocaleDateString(), score: 0, data:[]};
 			}
 		}
 		$ionicPlatform.ready(function(){
@@ -104,6 +112,13 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 			} 
 		 	delete $localStorage.pastResult; 
 		 	$scope.count = 0;
+		 	var sum = 0;
+			for(i=0;i<$scope.testResult.data.length;i++){
+				sum += $scope.testResult.data[i];
+			}
+			$scope.threshold = Math.round(sum/$scope.testResult.data.length*100)/100;
+			firebase.database().ref('users/'+$scope.userID+'/testresults/'+$scope.testResult.id).set($scope.testResult);
+		 	$scope.testResult=null;
 		 	window.location="#/testresult/0";
 	 	}
 	 };
@@ -124,11 +139,14 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 			$scope.labels = [];
 			var sum = 0;
 			for(i=0;i<$scope.results.length;i++){
-				$scope.data[0].push($scope.results[i].score);
-				$scope.labels.push("");
-				sum += $scope.results[i].score;
+				if($scope.results[i]){
+					$scope.data[0].push($scope.results[i].score);
+					$scope.labels.push("");
+					sum += $scope.results[i].score;
+				}
 			}
 			$scope.avgThreshold = Math.round(sum/$scope.results.length*100)/100;
+			$localStorage.numOfTestResults = $scope.results[$scope.results.length-1].id;
 		}
 		});
 	});

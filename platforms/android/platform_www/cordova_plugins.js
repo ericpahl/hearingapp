@@ -9,45 +9,20 @@ module.exports = [
         ]
     },
     {
+        "id": "cordova-plugin-calendar.Calendar",
+        "file": "plugins/cordova-plugin-calendar/www/Calendar.js",
+        "pluginId": "cordova-plugin-calendar",
+        "clobbers": [
+            "Calendar"
+        ]
+    },
+    {
         "id": "cordova-plugin-device.device",
         "file": "plugins/cordova-plugin-device/www/device.js",
         "pluginId": "cordova-plugin-device",
         "clobbers": [
             "device"
         ]
-    },
-    {
-        "id": "cordova-plugin-nativeaudio.nativeaudio",
-        "file": "plugins/cordova-plugin-nativeaudio/www/nativeaudio.js",
-        "pluginId": "cordova-plugin-nativeaudio",
-        "clobbers": [
-            "window.plugins.NativeAudio"
-        ]
-    },
-    {
-        "id": "cordova-plugin-splashscreen.SplashScreen",
-        "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-        "pluginId": "cordova-plugin-splashscreen",
-        "clobbers": [
-            "navigator.splashscreen"
-        ]
-    },
-    {
-        "id": "cordova-plugin-statusbar.statusbar",
-        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
-        "pluginId": "cordova-plugin-statusbar",
-        "clobbers": [
-            "window.StatusBar"
-        ]
-    },
-    {
-        "id": "ionic-plugin-keyboard.keyboard",
-        "file": "plugins/ionic-plugin-keyboard/www/android/keyboard.js",
-        "pluginId": "ionic-plugin-keyboard",
-        "clobbers": [
-            "cordova.plugins.Keyboard"
-        ],
-        "runs": true
     },
     {
         "id": "cordova-plugin-file.DirectoryEntry",
@@ -223,6 +198,29 @@ module.exports = [
         "runs": true
     },
     {
+        "id": "cordova-plugin-geolocation.geolocation",
+        "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
+        "pluginId": "cordova-plugin-geolocation",
+        "clobbers": [
+            "navigator.geolocation"
+        ]
+    },
+    {
+        "id": "cordova-plugin-geolocation.PositionError",
+        "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
+        "pluginId": "cordova-plugin-geolocation",
+        "runs": true
+    },
+    {
+        "id": "cordova-plugin-inappbrowser.inappbrowser",
+        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+        "pluginId": "cordova-plugin-inappbrowser",
+        "clobbers": [
+            "cordova.InAppBrowser.open",
+            "window.open"
+        ]
+    },
+    {
         "id": "cordova-plugin-media.MediaError",
         "file": "plugins/cordova-plugin-media/www/MediaError.js",
         "pluginId": "cordova-plugin-media",
@@ -239,34 +237,36 @@ module.exports = [
         ]
     },
     {
-        "id": "cordova-plugin-inappbrowser.inappbrowser",
-        "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
-        "pluginId": "cordova-plugin-inappbrowser",
+        "id": "cordova-plugin-nativeaudio.nativeaudio",
+        "file": "plugins/cordova-plugin-nativeaudio/www/nativeaudio.js",
+        "pluginId": "cordova-plugin-nativeaudio",
         "clobbers": [
-            "cordova.InAppBrowser.open",
-            "window.open"
+            "window.plugins.NativeAudio"
         ]
     },
     {
-        "id": "cordova-plugin-calendar.Calendar",
-        "file": "plugins/cordova-plugin-calendar/www/Calendar.js",
-        "pluginId": "cordova-plugin-calendar",
+        "id": "cordova-plugin-splashscreen.SplashScreen",
+        "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+        "pluginId": "cordova-plugin-splashscreen",
         "clobbers": [
-            "Calendar"
+            "navigator.splashscreen"
         ]
     },
     {
-        "id": "cordova-plugin-geolocation.geolocation",
-        "file": "plugins/cordova-plugin-geolocation/www/android/geolocation.js",
-        "pluginId": "cordova-plugin-geolocation",
+        "id": "cordova-plugin-statusbar.statusbar",
+        "file": "plugins/cordova-plugin-statusbar/www/statusbar.js",
+        "pluginId": "cordova-plugin-statusbar",
         "clobbers": [
-            "navigator.geolocation"
+            "window.StatusBar"
         ]
     },
     {
-        "id": "cordova-plugin-geolocation.PositionError",
-        "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
-        "pluginId": "cordova-plugin-geolocation",
+        "id": "ionic-plugin-keyboard.keyboard",
+        "file": "plugins/ionic-plugin-keyboard/www/android/keyboard.js",
+        "pluginId": "ionic-plugin-keyboard",
+        "clobbers": [
+            "cordova.plugins.Keyboard"
+        ],
         "runs": true
     }
 ];
@@ -274,20 +274,20 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "at.gofg.sportscomputer.powermanagement": "1.1.2",
+    "cordova-plugin-compat": "1.0.0",
+    "cordova-plugin-calendar": "4.5.4",
     "cordova-plugin-console": "1.0.4",
     "cordova-plugin-crosswalk-webview": "2.1.0",
     "cordova-plugin-device": "1.1.3",
+    "cordova-plugin-file": "4.3.0",
+    "cordova-plugin-geolocation": "2.4.0",
+    "cordova-plugin-inappbrowser": "1.5.0",
+    "cordova-plugin-media": "2.3.0",
     "cordova-plugin-nativeaudio": "3.0.7",
     "cordova-plugin-splashscreen": "4.0.0",
     "cordova-plugin-statusbar": "2.2.0",
     "cordova-plugin-whitelist": "1.3.0",
-    "ionic-plugin-keyboard": "2.2.1",
-    "cordova-plugin-compat": "1.0.0",
-    "cordova-plugin-file": "4.3.0",
-    "cordova-plugin-media": "2.3.0",
-    "cordova-plugin-inappbrowser": "1.5.0",
-    "cordova-plugin-calendar": "4.5.4",
-    "cordova-plugin-geolocation": "2.4.0"
+    "ionic-plugin-keyboard": "2.2.1"
 };
 // BOTTOM OF METADATA
 });
