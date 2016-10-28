@@ -104,7 +104,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	 		document.getElementById("guess3").value="";
 	 		$scope.numbers=null;
 	 	}
-	 	if($scope.count==24){
+	 	if($scope.count==2){
 	 		$scope.numbers=null;
 		 	if($scope.media){
 				$scope.media.pause(); 
@@ -118,8 +118,9 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 			}
 			$scope.threshold = Math.round(sum/$scope.testResult.data.length*100)/100;
 			firebase.database().ref('users/'+$scope.userID+'/testresults/'+$scope.testResult.id).set($scope.testResult);
-		 	$scope.testResult=null;
-		 	window.location="#/testresult/"+$scope.testResult.id;
+		 	$scope.id=$scope.testResult.id;
+		 	$localStorage.numOfTestResults=$scope.testResult.id;
+		 	window.location="#/testresult/"+$scope.id;
 	 	}
 	 };
 })
