@@ -45,56 +45,59 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 			if(!$scope.testResult){
 				$scope.loudness=0;
 				$scope.testResult={id: $localStorage.numOfTestResults+1, date: d.toLocaleDateString(), score: 0, data:[]};
+				$scope.testResult.data.length=24;
 			}
 		}
 		$ionicPlatform.ready(function(){
 			var ref = firebase.storage().ref('Audio/Male');
 			setTimeout(function(){
 			ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
+					console.log(url);
 					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 					{
-						$scope.media=new Media(url);
+						$scope.media=new Media(url,function onSuccess(){
+							$scope.media.release();
+							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
+								console.log(url);
+									$scope.media=new Media(url,function onSuccess(){
+										$scope.media.release();
+										ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
+											console.log(url);
+											$scope.media=new Media(url,function onSuccess(){$scope.media.release();});
+											$scope.media.play();
+										});
+									});
+								$scope.media.play();
+							});
+						});
+					$scope.media.play();
 					}
 					else{
-						$scope.media = new Audio(url);
-						
-					}
-					$scope.media.play();
-				setTimeout(function(){
-					ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
-						if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
-						{
-							$scope.media=new Media(url);
-						}
-						else{
-							$scope.media = new Audio(url);
-							
-						}
+						$scope.media=new Audio(url);
 						$scope.media.play();
-					});
 						setTimeout(function(){
-						ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
-							if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
-							{
-								$scope.media=new Media(url);
-							}
-							else{
-								$scope.media = new Audio(url);
-								
-							}
-							$scope.media.play();
-						});
-					},1000);
-				},1000);
+							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
+								$scope.media=new Audio(url);
+								$scope.media.play();
+								setTimeout(function(){
+									ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
+										$scope.media=new Audio(url);
+										$scope.media.play();
+									});
+								},1000);
+							});
+						},1000);
+					}
+				});
+			},500);
 			});
-		},500);
-	    });
 	};
 	
 	 $scope.submit=function(){ 
 	 	if($scope.numbers&&document.getElementById("guess1").value&&document.getElementById("guess2").value&&document.getElementById("guess3").value){
+	 		$scope.testResult.data[$scope.count]=$scope.loudness;
+	 		console.log($scope.testResult.data);
 	 		$scope.count++;
-	 		$scope.testResult.data.push($scope.loudness);
 	 		if(document.getElementById("guess1").value==$scope.numbers[0]&&document.getElementById("guess2").value==$scope.numbers[1]&&document.getElementById("guess3").value==$scope.numbers[2]){
 	 			if($scope.loudness!=-20){
 	 				$scope.loudness=$scope.loudness-2;
@@ -164,7 +167,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 })
 
 .controller('TestResultCtrl', function($scope,$stateParams,$localStorage,$state){
-	$scope.labels=["","","","","","",""];
+	$scope.labels=["","","","","","","","","","","","","","","","","","","","","","","",""];
 	$scope.series=['Series A'];
     $scope.lineOptions ={ elements : { line : { tension : 0 } }};
 	$scope.returnToMain = function(){$state.go('mainmenu')};

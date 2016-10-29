@@ -8,15 +8,15 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	$localStorage.numOfTestResults=null;
 	firebase.auth().onAuthStateChanged(function(){
 		$scope.userID=firebase.auth().currentUser.uid;
-		firebase.database().ref('users/'+$scope.userID+'/testresults/0').set({
-		id:0, date:"9/22/16", score:42, data:[65, 59, 80, 81, 56, 55, 40]
-	  });
-		firebase.database().ref('users/'+$scope.userID+'/testresults/1').set({
-			id:1, date:"9/13/16",score:37,data:[65, 20, 30, 81, 40, 55, 10]
-	  });
-		firebase.database().ref('users/'+$scope.userID+'/testresults/2').set({
-			id:2,date:"8/22/16",score:39,data:[80, 76, 80, 81, 87, 90, 88]
-	  });
+	// 	firebase.database().ref('users/'+$scope.userID+'/testresults/0').set({
+	// 	id:0, date:"9/22/16", score:42, data:[65, 59, 80, 81, 56, 55, 40]
+	//   });
+	// 	firebase.database().ref('users/'+$scope.userID+'/testresults/1').set({
+	// 		id:1, date:"9/13/16",score:37,data:[65, 20, 30, 81, 40, 55, 10]
+	//   });
+	// 	firebase.database().ref('users/'+$scope.userID+'/testresults/2').set({
+	// 		id:2,date:"8/22/16",score:39,data:[80, 76, 80, 81, 87, 90, 88]
+	//   });
 	});
 })
 
@@ -43,61 +43,70 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				$scope.numbers[2] = Math.floor(Math.random()*9)+1;
 			}
 			if(!$scope.testResult){
+				$scope.loudness=0;
 				$scope.testResult={id: $localStorage.numOfTestResults+1, date: d.toLocaleDateString(), score: 0, data:[]};
+				$scope.testResult.data.length=24;
 			}
 		}
 		$ionicPlatform.ready(function(){
-			var ref = firebase.storage().ref('Audio');
+			var ref = firebase.storage().ref('Audio/Male');
 			setTimeout(function(){
-			ref.child('FBH_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
+			ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
+					console.log(url);
 					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 					{
-						$scope.media=new Media(url);
+						$scope.media=new Media(url,function onSuccess(){
+							$scope.media.release();
+							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
+								console.log(url);
+									$scope.media=new Media(url,function onSuccess(){
+										$scope.media.release();
+										ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
+											console.log(url);
+											$scope.media=new Media(url,function onSuccess(){$scope.media.release();});
+											$scope.media.play();
+										});
+									});
+								$scope.media.play();
+							});
+						});
+					$scope.media.play();
 					}
 					else{
-						$scope.media = new Audio(url);
-						
-					}
-					$scope.media.play();
-				setTimeout(function(){
-					ref.child('FBH_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
-						if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
-						{
-							$scope.media=new Media(url);
-						}
-						else{
-							$scope.media = new Audio(url);
-							
-						}
+						$scope.media=new Audio(url);
 						$scope.media.play();
-					});
 						setTimeout(function(){
-						ref.child('FBH_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
-							if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
-							{
-								$scope.media=new Media(url);
-							}
-							else{
-								$scope.media = new Audio(url);
-								
-							}
-							$scope.media.play();
-						});
-					},750);
-				},750);
+							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
+								$scope.media=new Audio(url);
+								$scope.media.play();
+								setTimeout(function(){
+									ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
+										$scope.media=new Audio(url);
+										$scope.media.play();
+									});
+								},1000);
+							});
+						},1000);
+					}
+				});
+			},500);
 			});
-		},500);
-	    });
 	};
 	
 	 $scope.submit=function(){ 
 	 	if($scope.numbers&&document.getElementById("guess1").value&&document.getElementById("guess2").value&&document.getElementById("guess3").value){
+	 		$scope.testResult.data[$scope.count]=$scope.loudness;
+	 		console.log($scope.testResult.data);
 	 		$scope.count++;
 	 		if(document.getElementById("guess1").value==$scope.numbers[0]&&document.getElementById("guess2").value==$scope.numbers[1]&&document.getElementById("guess3").value==$scope.numbers[2]){
-
+	 			if($scope.loudness!=-20){
+	 				$scope.loudness=$scope.loudness-2;
+	 			}
 	 		}
 	 		else{
-
+	 			if($scope.loudness!=20){
+	 				$scope.loudness=$scope.loudness+2;
+	 			}
 	 		}
 	 		document.getElementById("guess1").value="";
 	 		document.getElementById("guess2").value="";
@@ -105,6 +114,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	 		$scope.numbers=null;
 	 	}
 	 	if($scope.count==24){
+	 		$scope.testResult.data.push($scope.loudness);
 	 		$scope.numbers=null;
 		 	if($scope.media){
 				$scope.media.pause(); 
@@ -116,10 +126,12 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 			for(i=0;i<$scope.testResult.data.length;i++){
 				sum += $scope.testResult.data[i];
 			}
-			$scope.threshold = Math.round(sum/$scope.testResult.data.length*100)/100;
+			$scope.testResult.score = Math.round(sum/$scope.testResult.data.length*100)/100;
 			firebase.database().ref('users/'+$scope.userID+'/testresults/'+$scope.testResult.id).set($scope.testResult);
+		 	$scope.id=$scope.testResult.id;
+		 	$localStorage.numOfTestResults=$scope.testResult.id;
 		 	$scope.testResult=null;
-		 	window.location="#/testresult/0";
+		 	window.location="#/testresult/"+$scope.id;
 	 	}
 	 };
 })
@@ -145,7 +157,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 					sum += $scope.results[i].score;
 				}
 			}
-			$scope.avgThreshold = Math.round(sum/$scope.results.length*100)/100;
+			$scope.avgThreshold = Math.round(sum/($scope.results.length-1)*100)/100;
 			$localStorage.numOfTestResults = $scope.results[$scope.results.length-1].id;
 		}
 		});
@@ -155,7 +167,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 })
 
 .controller('TestResultCtrl', function($scope,$stateParams,$localStorage,$state){
-	$scope.labels=["","","","","","",""];
+	$scope.labels=["","","","","","","","","","","","","","","","","","","","","","","",""];
 	$scope.series=['Series A'];
     $scope.lineOptions ={ elements : { line : { tension : 0 } }};
 	$scope.returnToMain = function(){$state.go('mainmenu')};
