@@ -257,11 +257,12 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				$scope.startDate = new Date(document.getElementById("myDate").value);
 				$scope.successMessage=null;
 				var offset=$scope.startDate.getTimezoneOffset();
-				$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000);
-				var endDate = new Date(Date.parse($scope.startDate)+86400000);
+				$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000+86400000);
+				$scope.date=new Date(Date.parse($scope.startDate)-86400000);
+				var endDate = new Date(Date.parse($scope.startDate));//+86400000);
 				if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
-					window.plugins.calendar.createEvent("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
-						$scope.successMessage=$scope.startDate.toLocaleDateString()+".";
+					window.plugins.calendar.createEventInteractively("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
+						$scope.successMessage=$scope.date.toLocaleDateString()+".";
 						document.getElementById("myDate").value=document.getElementById("myDate").defaultValue;
 						$scope.$apply();
 					});
@@ -273,7 +274,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 		if(ionic.Platform.isAndroid()||ionic.Platform.isIOS()){
 			$ionicPlatform.ready(function(){
 				if($scope.startDate){
-					window.plugins.calendar.openCalendar($scope.startDate);
+					window.plugins.calendar.openCalendar($scope.date);
 				}
 				else{
 					window.plugins.calendar.openCalendar();
