@@ -44,6 +44,16 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 			}
 			if(!$scope.testResult){
 				$scope.loudness=0;
+				var resultsRef=firebase.database().ref('users/'+$scope.userID+'/testresults');
+				resultsRef.once('value', function(snapshot){
+					$scope.results=snapshot.val();
+					if($scope.results){
+						$localStorage.numOfTestResults=$scope.results.length;
+					}
+					else{
+						$localStorage.numOfTestResults=0;
+					}
+				});
 				$scope.testResult={id: $localStorage.numOfTestResults+1, date: d.toLocaleDateString(), score: 0, data:[]};
 				$scope.testResult.data.length=24;
 			}
@@ -143,8 +153,16 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 		$scope.userID=firebase.auth().currentUser.uid;
 		var resultsRef = firebase.database().ref('users/'+$scope.userID+'/testresults');
 		resultsRef.on('value', function(snapshot){
-			$scope.results = snapshot.val();
-			if($scope.results){
+			$scope.rawResults = snapshot.val();
+			if($scope.rawResults){
+				$scope.rawResults=$scope.rawResults.reverse();
+				$scope.results=[];
+			for(i=0;i<$scope.rawResults.length;i++)
+			{
+				if($scope.rawResults[i]){
+					$scope.results.push($scope.rawResults[i]);
+				}
+			}
 			$scope.series=['Series A'];
 			$scope.data = [];
 			$scope.data[0]=[];
@@ -157,8 +175,8 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 					sum += $scope.results[i].score;
 				}
 			}
-			$scope.avgThreshold = Math.round(sum/($scope.results.length-1)*100)/100;
-			$localStorage.numOfTestResults = $scope.results[$scope.results.length-1].id;
+			$scope.avgThreshold = Math.round(sum/($scope.results.length)*100)/100;
+			$localStorage.numOfTestResults = $scope.rawResults.length;
 		}
 		});
 	});
@@ -259,7 +277,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				var offset=$scope.startDate.getTimezoneOffset();
 				$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000+86400000);
 				$scope.date=new Date(Date.parse($scope.startDate)-86400000);
-				var endDate = new Date(Date.parse($scope.startDate));//+86400000);
+				var endDate = new Date(Date.parse($scope.startDate));
 				if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
 					window.plugins.calendar.createEventInteractively("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
 						$scope.successMessage=$scope.date.toLocaleDateString()+".";
