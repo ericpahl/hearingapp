@@ -54,7 +54,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 						$localStorage.numOfTestResults=0;
 					}
 				});
-				$scope.testResult={id: $localStorage.numOfTestResults+1, date: d.toLocaleDateString(), score: 0, data:[]};
+				$scope.testResult={id: $localStorage.numOfTestResults, date: d.toLocaleDateString(), score: 0, data:[]};
 				$scope.testResult.data.length=24;
 			}
 		}
@@ -168,7 +168,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 			$scope.data[0]=[];
 			$scope.labels = [];
 			var sum = 0;
-			for(i=0;i<$scope.results.length;i++){
+			for(i=$scope.results.length-1;i>=0;i--){
 				if($scope.results[i]){
 					$scope.data[0].push($scope.results[i].score);
 					$scope.labels.push("");
@@ -239,26 +239,69 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 })
 
 .controller('LoginCtrl',function($scope,$state,$cordovaOauth){
-	$scope.login=function(){
+	$scope.googleLogin=function(){
 		if(!firebase.auth().currentUser)
 		{
 			if(!ionic.Platform.isAndroid()&&!ionic.Platform.isIOS()){
 	                	var provider = new firebase.auth.GoogleAuthProvider();
-						firebase.auth().signInWithPopup(provider).then(function(){
+						firebase.auth().signInWithPopup(provider).then(function(user){
 							if(firebase.auth().currentUser){
 								$state.go('mainmenu');
 							}
-						});
+						}).catch(function(error){
+							  		if (error.code === 'auth/account-exists-with-different-credential') {
+							  			$scope.provider="Facebook";
+									}
+									console.log(error);
+							});
 	                }
 	                else{
 	                    $cordovaOauth.google("180218637488-t2or73169ubmhbk0or5r027ct86c1ghr.apps.googleusercontent.com",
 	                    	["email", "profile"]).then(function(result){
 	                    		var credential = firebase.auth.GoogleAuthProvider.credential(result.id_token,result.access_token);
-	                    		firebase.auth().signInWithCredential(credential);
+	                    		firebase.auth().signInWithCredential(credential).catch(function(error){
+							  		if (error.code === 'auth/account-exists-with-different-credential') {
+							  			$scope.provider="Facebook";
+									}
+								});
 	                    		if(firebase.auth().currentUser){
 	                    			$state.go('mainmenu');
 	                    		}
 	                    	});
+	                }
+		}
+	};
+	$scope.facebookLogin=function(){
+		if(!firebase.auth().currentUser)
+		{
+			if(!ionic.Platform.isAndroid()&&!ionic.Platform.isIOS()){
+	                	var provider = new firebase.auth.FacebookAuthProvider();
+						firebase.auth().signInWithPopup(provider).then(function(user){
+							if(firebase.auth().currentUser){
+								$state.go('mainmenu');
+							}
+						}).catch(function(error){
+							  		if (error.code === 'auth/account-exists-with-different-credential') {
+							  			$scope.provider="Google";
+							  			$scope.$apply();
+									}
+							});
+	                }
+	                else{
+	                    $cordovaOauth.facebook("1808012456144830",
+	                    	["email"]).then(function(result){
+	                    		var credential = firebase.auth.FacebookAuthProvider.credential(result.access_token);
+	                    		firebase.auth().signInWithCredential(credential).catch(function(error){
+							  		if (error.code === 'auth/account-exists-with-different-credential') {
+							  			$scope.provider="Google";
+							  			$scope.$apply();
+									}
+								});
+	                    		
+	                    	},function(error){console.log(error);});
+	                    	if(firebase.auth().currentUser){
+	                    		$state.go('mainmenu');
+	                    	}
 	                }
 		}
 	};
@@ -267,6 +310,9 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 			$state.go('mainmenu');
 		}
 		});
+	$scope.goBack=function(){
+		$scope.provider=null;
+	}
 })
 .controller('SchedulerCtrl', function($scope,$state,$ionicPlatform){
 	$scope.scheduleTest=function(){
