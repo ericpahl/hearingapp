@@ -346,8 +346,14 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				$scope.startDate = new Date(document.getElementById("myDate").value);
 				$scope.successMessage=null;
 				var offset=$scope.startDate.getTimezoneOffset();
-				$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000+86400000);
-				$scope.date=new Date(Date.parse($scope.startDate)-86400000);
+				if(ionic.Platform.isAndroid()){
+					$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000+86400000);
+					$scope.date=new Date(Date.parse($scope.startDate)-86400000);
+				}
+				if(ionic.Platform.isIOS()){
+					$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000);
+					$scope.date=new Date(Date.parse($scope.startDate));
+				}
 				var endDate = new Date(Date.parse($scope.startDate));
 				if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
 					window.plugins.calendar.createEventInteractively("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
