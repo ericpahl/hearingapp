@@ -1,7 +1,7 @@
 angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova','firebase','ngCordovaOauth'])
 
 .controller('MainMenuCtrl', function($scope,$state,Auth,$localStorage){
-	$scope.startTest = function(){$state.go('test')};
+	$scope.startTest = function(){$state.go('instructions')};
 	$scope.pastResults = function(){$state.go('pastresults')};
 	$scope.updateInformation = function(){$state.go('information')};
 	$scope.scheduleTest=function(){$state.go('scheduler')};
@@ -20,13 +20,46 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	});
 })
 
+.controller('InstructionsCtrl',function($scope,$state){
+	$scope.startTest=function(){
+		$state.go('test');
+	};
+	$scope.playSound=function(){
+		firebase.storage().ref('Audio/noise.wav').getDownloadURL().then(function(url){
+			if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+			{
+				var media=new Media(url);
+				media.play();
+			}
+			else{
+				var media=new Audio(url);
+				media.play();
+			}
+		})
+	};
+	$scope.returnToMain=function(){
+		$state.go('mainmenu');
+	};
+})
+
 .controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
 	$scope.count=0;
 	firebase.auth().onAuthStateChanged(function(){
 		$scope.userID=firebase.auth().currentUser.uid;
+		var resultsRef=firebase.database().ref('users/'+$scope.userID+'/testresults');
+	resultsRef.on('value', function(snapshot){
+					$scope.results=snapshot.val();
+					if($scope.results){
+						$localStorage.numOfTestResults=Object.keys($scope.results).length;
+					}
+					else{
+						$localStorage.numOfTestResults=0;
+					}
+				});
 	});
 	var d = new Date(Date.now());
 	$scope.returnToMain = function(){
+		$scope.count=0;
 		$scope.numbers=null;
 		if($scope.media){
 			$scope.media.pause(); 
@@ -34,6 +67,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 		}
 		$state.go('mainmenu')
 	};
+
 	$scope.playSound=function(){
 		if(!$scope.numbers){
 			$scope.number=$scope.numbers=[7,7,7];
@@ -43,19 +77,10 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				$scope.numbers[2] = Math.floor(Math.random()*9)+1;
 			}
 			if(!$scope.testResult){
-				$scope.loudness=0;
-				var resultsRef=firebase.database().ref('users/'+$scope.userID+'/testresults');
-				resultsRef.once('value', function(snapshot){
-					$scope.results=snapshot.val();
-					if($scope.results){
-						$localStorage.numOfTestResults=$scope.results.length;
-					}
-					else{
-						$localStorage.numOfTestResults=0;
-					}
-				});
-				$scope.testResult={id: $localStorage.numOfTestResults, date: d.toLocaleDateString(), score: 0, data:[]};
-				$scope.testResult.data.length=24;
+				$scope.loudness=0;				
+					$scope.testResult={id: $localStorage.numOfTestResults, date: d.toLocaleDateString(), score: 0, data:[]};
+					$scope.testResult.data.length=24;
+				
 			}
 		}
 		$ionicPlatform.ready(function(){

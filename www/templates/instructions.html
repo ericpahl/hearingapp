@@ -1,0 +1,24 @@
+<ion-view>
+	<ion-header-bar class="bar-stable" align-title="center">
+  <button class = "button button-icon icon ion-home" ng-click="returnToMain()"></button>
+    <h1 class="title">Instructions</h1>
+  </ion-header-bar>
+  <ion-content>
+  <center>
+  <div ng-if="!provider">
+  <div style="height:20px"></div>
+  <h2>You are about to start a hearing test.</h2>
+  <p>The test consists of sequences of three digits spoken over background noise. You will guess which digits are spoken in each sequence. The volume of the sequences will increase and decrease based on the correctness of your answers. There will be 24 sequences in the test.</p>
+  <div style="height:20px"></div>
+  <div class="row">
+  <div class="col"><h4>Press the button to play a test noise. Adjust the volume on your phone so that you can comfortably hear the noise.</h4></div>
+  <div class="col"><button class="button button-icon ion-volume-high speakerbutton" ng-click="playSound()"></button></div>
+  </div>
+  
+<div style="height:20px"></div>
+<h4>When the volume is at a comfortable level, press the button below to start the test.</h4>
+<div style="height:20px"></div>
+  <ion-button class="button button-full button-calm" ng-click="startTest()">Begin Test</ion-button>
+</center>
+  </ion-content>
+</ion-view>
