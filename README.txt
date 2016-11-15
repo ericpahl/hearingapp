@@ -34,6 +34,7 @@ The user can return to the main menu by tapping the home icon.
 Tapping Schedule Test will take the user to a view which allows them to schedule a test for a future date.
 Entering a date in the date picker and pressing Schedule Test will create an all-day event called HearMe Test on the date picked in the device’s native calendar.
 Tapping Open Calendar will open the device’s native calendar to the day of the most recently scheduled test, or today if no test has been scheduled.
+There will be a list of tests scheduled in the future. Tapping one of these will open the calendar on the day of the test.
 The user can return to the main menu by tapping the home icon.
 
 2. Supported Devices
@@ -62,10 +63,12 @@ For further reference about the test we are trying to implement, see the followi
 
 5. Updates in this version
 -Added an instructions page before the test begins which also allows the user to adjust their volume after playing a test sound
--Added the ability to log in using Facebook (Note: user cannot log in with a facebook account if they have already logged in with a google account tied to the same email address)
+-Added the ability to log in using Facebook
 -Changed the set up of the audio files so playback is more consistent during the test
 -Fixed bugs related to storing past test results
 -Fixed bug related to the scheduling feature; the event will now be scheduled interactively instead of silently
+-The scheduling screen will now display a list of all events in the native calendar titled "HearMe Test"; tapping the event in the list will open the calendar on the day of the event
+-The first time a user updates their information in the "Update Information" screen, the name field will be prepopulated based on the user's Google or Facebook account information. This will occur until the user saves their information.
 
 
 

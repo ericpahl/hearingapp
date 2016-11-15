@@ -241,7 +241,7 @@ $ionicPlatform.ready(function(){
 	});
 })
 
-.controller('InformationCtrl', function($scope,$state,$cordovaOauth){
+.controller('InformationCtrl', function($scope,$state,$cordovaOauth,$localStorage){
 	$scope.returnToMain = function(){$state.go('mainmenu')};
 	$scope.logOut=function(){
 		firebase.auth().signOut();
@@ -263,6 +263,10 @@ $ionicPlatform.ready(function(){
 				document.getElementById("lastname").value="";
 				document.getElementById("sex").value="";
 				document.getElementById("dob").value="";
+				if($localStorage.names){
+					document.getElementById("firstname").value=$localStorage.names[0];
+					document.getElementById("lastname").value=$localStorage.names[$localStorage.names.length-1];
+				}
 			}
 		});
 	});
@@ -278,8 +282,9 @@ $ionicPlatform.ready(function(){
 	};
 })
 
-.controller('LoginCtrl',function($scope,$state,$cordovaOauth){
+.controller('LoginCtrl',function($scope,$state,$cordovaOauth,$localStorage){
 	$scope.googleLogin=function(){
+
 		if(!firebase.auth().currentUser)
 		{
 			if(!ionic.Platform.isAndroid()&&!ionic.Platform.isIOS()){
@@ -288,22 +293,13 @@ $ionicPlatform.ready(function(){
 							if(firebase.auth().currentUser){
 								$state.go('mainmenu');
 							}
-						}).catch(function(error){
-							  		if (error.code === 'auth/account-exists-with-different-credential') {
-							  			$scope.provider="Facebook";
-									}
-									console.log(error);
-							});
+						});
 	                }
 	                else{
 	                    $cordovaOauth.google("180218637488-t2or73169ubmhbk0or5r027ct86c1ghr.apps.googleusercontent.com",
 	                    	["email", "profile"]).then(function(result){
 	                    		var credential = firebase.auth.GoogleAuthProvider.credential(result.id_token,result.access_token);
-	                    		firebase.auth().signInWithCredential(credential).catch(function(error){
-							  		if (error.code === 'auth/account-exists-with-different-credential') {
-							  			$scope.provider="Facebook";
-									}
-								});
+	                    		firebase.auth().signInWithCredential(credential);
 	                    		if(firebase.auth().currentUser){
 	                    			$state.go('mainmenu');
 	                    		}
@@ -320,33 +316,24 @@ $ionicPlatform.ready(function(){
 							if(firebase.auth().currentUser){
 								$state.go('mainmenu');
 							}
-						}).catch(function(error){
-							  		if (error.code === 'auth/account-exists-with-different-credential') {
-							  			$scope.provider="Google";
-							  			$scope.$apply();
-									}
-							});
+						 });
 	                }
 	                else{
 	                    $cordovaOauth.facebook("1808012456144830",
 	                    	["email"]).then(function(result){
 	                    		var credential = firebase.auth.FacebookAuthProvider.credential(result.access_token);
-	                    		firebase.auth().signInWithCredential(credential).catch(function(error){
-							  		if (error.code === 'auth/account-exists-with-different-credential') {
-							  			$scope.provider="Google";
-							  			$scope.$apply();
-									}
-								});
-	                    		
-	                    	},function(error){console.log(error);});
+	                     		firebase.auth().signInWithCredential(credential);
 	                    	if(firebase.auth().currentUser){
 	                    		$state.go('mainmenu');
 	                    	}
+	                });
+	                    }
 	                }
-		}
+		
 	};
 	firebase.auth().onAuthStateChanged(function(user){
 		if(user){
+			$localStorage.names=user.providerData[0].displayName.split(" ");
 			$state.go('mainmenu');
 		}
 		});
