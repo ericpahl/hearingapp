@@ -60,4 +60,12 @@ During the tests, subjects must repeat or select digits/words/sentences, typical
 Each stimulus is scored as either correct or incorrect and the intensity of the stimulus is adjusted using a 2-up-1-down paradigm, while the background noise in the audio is held at the same intensity.
 For further reference about the test we are trying to implement, see the following website: http://www.californiaearinstitute.com/audiology-services-hint-bay-area-ca.php.
 
+5. Updates in this version
+-Added an instructions page before the test begins which also allows the user to adjust their volume after playing a test sound
+-Added the ability to log in using Facebook (Note: user cannot log in with a facebook account if they have already logged in with a google account tied to the same email address)
+-Changed the set up of the audio files so playback is more consistent during the test
+-Fixed bugs related to storing past test results
+-Fixed bug related to the scheduling feature; the event will now be scheduled interactively instead of silently
+
+
 

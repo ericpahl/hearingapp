@@ -98,8 +98,8 @@ $ionicPlatform.ready(function(){
 		}
 		$ionicPlatform.ready(function(){
 			var ref = firebase.storage().ref('Audio/Male-Digits');
-			setTimeout(function(){
 			$scope.noise.play();
+			setTimeout(function(){
 			ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
 					console.log(url);
 					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
@@ -148,12 +148,12 @@ $ionicPlatform.ready(function(){
 	 		console.log($scope.testResult.data);
 	 		$scope.count++;
 	 		if(document.getElementById("guess1").value==$scope.numbers[0]&&document.getElementById("guess2").value==$scope.numbers[1]&&document.getElementById("guess3").value==$scope.numbers[2]){
-	 			if($scope.loudness!=-20){
+	 			if($scope.loudness!=-30){
 	 				$scope.loudness=$scope.loudness-2;
 	 			}
 	 		}
 	 		else{
-	 			if($scope.loudness!=20){
+	 			if($scope.loudness!=30){
 	 				$scope.loudness=$scope.loudness+2;
 	 			}
 	 		}

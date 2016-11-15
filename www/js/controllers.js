@@ -355,6 +355,30 @@ $ionicPlatform.ready(function(){
 	}
 })
 .controller('SchedulerCtrl', function($scope,$state,$ionicPlatform){
+	$scope.testDates=[];
+	$scope.getTestDate=function(){
+		$ionicPlatform.ready(function(){
+				window.plugins.calendar.findEvent('HearMe Test',null,null,new Date(Date.now()+86400000*$scope.i),new Date(Date.now()+86400000*$scope.i),function(result){
+					if(result[0]){
+						var testDate = new Date(Date.parse(result[0].startDate)+86400000).toLocaleDateString();
+						console.log(testDate);
+						$scope.testDates.push(testDate);
+						console.log($scope.testDates);
+					}
+					$scope.i++;
+					if($scope.i<365){
+						$scope.getTestDate();
+					}
+				});
+		});
+	};
+	$scope.getTestDates=function(){
+		$scope.i=0;
+		$scope.getTestDate();
+	}
+	if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
+		$scope.getTestDates();
+	}
 	$scope.scheduleTest=function(){
 		$ionicPlatform.ready(function(){
 			if(document.getElementById("myDate").value){
@@ -380,10 +404,16 @@ $ionicPlatform.ready(function(){
 			}
 		});
 	};
+	$scope.goToTestEvent=function(date){
+		$scope.date=new Date(Date.parse(date));
+		console.log($scope.date);
+		$scope.goToCalendar();
+		$scope.date=null;
+	}
 	$scope.goToCalendar=function(){
 		if(ionic.Platform.isAndroid()||ionic.Platform.isIOS()){
 			$ionicPlatform.ready(function(){
-				if($scope.startDate){
+				if($scope.date){
 					window.plugins.calendar.openCalendar($scope.date);
 				}
 				else{
