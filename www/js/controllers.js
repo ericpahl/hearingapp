@@ -22,22 +22,23 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 
 .controller('InstructionsCtrl',function($scope,$state){
 	$scope.startTest=function(){
+		$scope.media.pause();
 		$state.go('test');
 	};
-	$scope.playSound=function(){
-		firebase.storage().ref('Audio/noise.wav').getDownloadURL().then(function(url){
+	firebase.storage().ref('Audio/noise.wav').getDownloadURL().then(function(url){
 			if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 			{
-				var media=new Media(url);
-				media.play();
+				$scope.media=new Media(url);
 			}
 			else{
-				var media=new Audio(url);
-				media.play();
+				$scope.media=new Audio(url);
 			}
-		})
+		});
+	$scope.playSound=function(){
+		$scope.media.play();
 	};
 	$scope.returnToMain=function(){
+		$scope.media.pause();
 		$state.go('mainmenu');
 	};
 })
@@ -65,9 +66,21 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 			$scope.media.pause(); 
 			$scope.media = null;
 		}
+		$scope.noise.pause();
 		$state.go('mainmenu')
 	};
 
+$ionicPlatform.ready(function(){
+		firebase.storage().ref('Audio/noise.wav').getDownloadURL().then(function(url){
+					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS()){
+						$scope.noise=new Media(url);
+					}
+					else{
+						$scope.noise=new Audio(url);
+					}
+			});
+
+});
 	$scope.playSound=function(){
 		if(!$scope.numbers){
 			$scope.number=$scope.numbers=[7,7,7];
@@ -84,7 +97,8 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 			}
 		}
 		$ionicPlatform.ready(function(){
-			var ref = firebase.storage().ref('Audio/Male');
+			var ref = firebase.storage().ref('Audio/Male-Digits');
+			$scope.noise.play();
 			setTimeout(function(){
 			ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
 					console.log(url);
@@ -134,12 +148,12 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	 		console.log($scope.testResult.data);
 	 		$scope.count++;
 	 		if(document.getElementById("guess1").value==$scope.numbers[0]&&document.getElementById("guess2").value==$scope.numbers[1]&&document.getElementById("guess3").value==$scope.numbers[2]){
-	 			if($scope.loudness!=-20){
+	 			if($scope.loudness!=-30){
 	 				$scope.loudness=$scope.loudness-2;
 	 			}
 	 		}
 	 		else{
-	 			if($scope.loudness!=20){
+	 			if($scope.loudness!=30){
 	 				$scope.loudness=$scope.loudness+2;
 	 			}
 	 		}
@@ -155,6 +169,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				$scope.media.pause(); 
 				$scope.media=null;
 			} 
+			$scope.noise.pause();
 		 	delete $localStorage.pastResult; 
 		 	$scope.count = 0;
 		 	var sum = 0;

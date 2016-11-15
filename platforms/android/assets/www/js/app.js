@@ -38,6 +38,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js', 'ngStorag
     controller: 'MainMenuCtrl',
     })
 
+  .state('instructions',{
+    url: '/instructions',
+    templateUrl: 'templates/instructions.html',
+    controller: 'InstructionsCtrl'
+  })
+
   .state('test', {
     url: '/test',
     templateUrl: 'templates/test.html',

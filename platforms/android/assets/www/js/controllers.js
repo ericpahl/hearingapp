@@ -1,7 +1,7 @@
 angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova','firebase','ngCordovaOauth'])
 
 .controller('MainMenuCtrl', function($scope,$state,Auth,$localStorage){
-	$scope.startTest = function(){$state.go('test')};
+	$scope.startTest = function(){$state.go('instructions')};
 	$scope.pastResults = function(){$state.go('pastresults')};
 	$scope.updateInformation = function(){$state.go('information')};
 	$scope.scheduleTest=function(){$state.go('scheduler')};
@@ -20,20 +20,67 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	});
 })
 
+.controller('InstructionsCtrl',function($scope,$state){
+	$scope.startTest=function(){
+		$scope.media.pause();
+		$state.go('test');
+	};
+	firebase.storage().ref('Audio/noise.wav').getDownloadURL().then(function(url){
+			if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+			{
+				$scope.media=new Media(url);
+			}
+			else{
+				$scope.media=new Audio(url);
+			}
+		});
+	$scope.playSound=function(){
+		$scope.media.play();
+	};
+	$scope.returnToMain=function(){
+		$scope.media.pause();
+		$state.go('mainmenu');
+	};
+})
+
 .controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
 	$scope.count=0;
 	firebase.auth().onAuthStateChanged(function(){
 		$scope.userID=firebase.auth().currentUser.uid;
+		var resultsRef=firebase.database().ref('users/'+$scope.userID+'/testresults');
+	resultsRef.on('value', function(snapshot){
+					$scope.results=snapshot.val();
+					if($scope.results){
+						$localStorage.numOfTestResults=Object.keys($scope.results).length;
+					}
+					else{
+						$localStorage.numOfTestResults=0;
+					}
+				});
 	});
 	var d = new Date(Date.now());
 	$scope.returnToMain = function(){
+		$scope.count=0;
 		$scope.numbers=null;
 		if($scope.media){
 			$scope.media.pause(); 
 			$scope.media = null;
 		}
+		$scope.noise.pause();
 		$state.go('mainmenu')
 	};
+
+$ionicPlatform.ready(function(){
+		firebase.storage().ref('Audio/noise.wav').getDownloadURL().then(function(url){
+					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS()){
+						$scope.noise=new Media(url);
+					}
+					else{
+						$scope.noise=new Audio(url);
+					}
+			});
+
+});
 	$scope.playSound=function(){
 		if(!$scope.numbers){
 			$scope.number=$scope.numbers=[7,7,7];
@@ -43,24 +90,16 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				$scope.numbers[2] = Math.floor(Math.random()*9)+1;
 			}
 			if(!$scope.testResult){
-				$scope.loudness=0;
-				var resultsRef=firebase.database().ref('users/'+$scope.userID+'/testresults');
-				resultsRef.once('value', function(snapshot){
-					$scope.results=snapshot.val();
-					if($scope.results){
-						$localStorage.numOfTestResults=$scope.results.length;
-					}
-					else{
-						$localStorage.numOfTestResults=0;
-					}
-				});
-				$scope.testResult={id: $localStorage.numOfTestResults, date: d.toLocaleDateString(), score: 0, data:[]};
-				$scope.testResult.data.length=24;
+				$scope.loudness=0;				
+					$scope.testResult={id: $localStorage.numOfTestResults, date: d.toLocaleDateString(), score: 0, data:[]};
+					$scope.testResult.data.length=24;
+				
 			}
 		}
 		$ionicPlatform.ready(function(){
-			var ref = firebase.storage().ref('Audio/Male');
+			var ref = firebase.storage().ref('Audio/Male-Digits');
 			setTimeout(function(){
+			$scope.noise.play();
 			ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
 					console.log(url);
 					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
@@ -130,6 +169,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				$scope.media.pause(); 
 				$scope.media=null;
 			} 
+			$scope.noise.pause();
 		 	delete $localStorage.pastResult; 
 		 	$scope.count = 0;
 		 	var sum = 0;
@@ -321,8 +361,14 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				$scope.startDate = new Date(document.getElementById("myDate").value);
 				$scope.successMessage=null;
 				var offset=$scope.startDate.getTimezoneOffset();
-				$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000+86400000);
-				$scope.date=new Date(Date.parse($scope.startDate)-86400000);
+				if(ionic.Platform.isAndroid()){
+					$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000+86400000);
+					$scope.date=new Date(Date.parse($scope.startDate)-86400000);
+				}
+				if(ionic.Platform.isIOS()){
+					$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000);
+					$scope.date=new Date(Date.parse($scope.startDate));
+				}
 				var endDate = new Date(Date.parse($scope.startDate));
 				if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
 					window.plugins.calendar.createEventInteractively("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){

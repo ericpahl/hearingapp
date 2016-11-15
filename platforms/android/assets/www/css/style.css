@@ -3,6 +3,11 @@ button.playbutton{
 	color:#11c1f3;
 }
 
+button.speakerbutton{
+	font-size:120px;
+	color:#11c1f3;
+}
+
 ion-content{
 	background-color: #FFFFFF
 }
