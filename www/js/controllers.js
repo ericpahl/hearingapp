@@ -341,16 +341,16 @@ $ionicPlatform.ready(function(){
 		$scope.provider=null;
 	}
 })
-.controller('SchedulerCtrl', function($scope,$state,$ionicPlatform){
-	$scope.testDates=[];
+.controller('SchedulerCtrl', function($scope,$state,$ionicPlatform,$window){
 	$scope.getTestDate=function(){
 		$ionicPlatform.ready(function(){
 				window.plugins.calendar.findEvent('HearMe Test',null,null,new Date(Date.now()+86400000*$scope.i),new Date(Date.now()+86400000*$scope.i),function(result){
 					if(result[0]){
 						var testDate = new Date(Date.parse(result[0].startDate)+86400000).toLocaleDateString();
 						console.log(testDate);
-						$scope.testDates.push(testDate);
-						console.log($scope.testDates);
+						$scope.testDates.tds.push(testDate);
+						$scope.$apply();
+						console.log($scope.testDates.tds);
 					}
 					$scope.i++;
 					if($scope.i<365){
@@ -359,8 +359,10 @@ $ionicPlatform.ready(function(){
 				});
 		});
 	};
+	$scope.testDates={};
 	$scope.getTestDates=function(){
 		$scope.i=0;
+		$scope.testDates.tds=[];
 		$scope.getTestDate();
 	}
 	if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
@@ -383,8 +385,9 @@ $ionicPlatform.ready(function(){
 				var endDate = new Date(Date.parse($scope.startDate));
 				if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
 					window.plugins.calendar.createEventInteractively("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
-						$scope.successMessage=$scope.date.toLocaleDateString()+".";
+						$scope.getTestDates();
 						document.getElementById("myDate").value=document.getElementById("myDate").defaultValue;
+						$scope.successMessage=$scope.date.toLocaleDateString()+".";
 						$scope.$apply();
 					});
 				}
@@ -408,6 +411,10 @@ $ionicPlatform.ready(function(){
 				}
 			});
 		}
+	};
+	$scope.delete=function(date){
+		window.plugins.calendar.deleteEvent("HearMe Test",null,null,new Date(Date.parse(date)),new Date(Date.parse(date)));
+		$scope.getTestDates();
 	};
 	$scope.returnToMain = function(){
 		$scope.successMessage=null;
