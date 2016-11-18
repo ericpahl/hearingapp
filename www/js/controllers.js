@@ -173,10 +173,10 @@ $ionicPlatform.ready(function(){
 		 	delete $localStorage.pastResult; 
 		 	$scope.count = 0;
 		 	var sum = 0;
-			for(i=0;i<$scope.testResult.data.length;i++){
+			for(i=4;i<$scope.testResult.data.length;i++){
 				sum += $scope.testResult.data[i];
 			}
-			$scope.testResult.score = Math.round(sum/$scope.testResult.data.length*100)/100;
+			$scope.testResult.score = Math.round(sum/($scope.testResult.data.length-4)*100)/100;
 			firebase.database().ref('users/'+$scope.userID+'/testresults/'+$scope.testResult.id).set($scope.testResult);
 		 	$scope.id=$scope.testResult.id;
 		 	$localStorage.numOfTestResults=$scope.testResult.id;
