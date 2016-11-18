@@ -43,7 +43,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	};
 })
 
-.controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
+.controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform,$cordovaFileTransfer){
 	$scope.count=0;
 	firebase.auth().onAuthStateChanged(function(){
 		$scope.userID=firebase.auth().currentUser.uid;
@@ -97,50 +97,116 @@ $ionicPlatform.ready(function(){
 			}
 		}
 		$ionicPlatform.ready(function(){
-			var ref = firebase.storage().ref('Audio/Male-Digits');
-			$scope.noise.play();
+				var ref = firebase.storage().ref('Audio/Male');
 			setTimeout(function(){
 			ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
 					console.log(url);
 					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 					{
-						$scope.media=new Media(url,function onSuccess(){
-							$scope.media.release();
-							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
-								console.log(url);
-									$scope.media=new Media(url,function onSuccess(){
-										$scope.media.release();
-										ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
-											console.log(url);
-											$scope.media=new Media(url,function onSuccess(){$scope.media.release();});
-											$scope.media.play();
-										});
-									});
-								$scope.media.play();
-							});
-						});
-					$scope.media.play();
+						$scope.media=new Media(url);
 					}
 					else{
 						$scope.media=new Audio(url);
+					}
 						$scope.media.play();
 						setTimeout(function(){
 							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
-								$scope.media=new Audio(url);
+								if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+					{
+						$scope.media=new Media(url);
+					}
+					else{
+						$scope.media=new Audio(url);
+					}
 								$scope.media.play();
 								setTimeout(function(){
 									ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
-										$scope.media=new Audio(url);
+										if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+					{
+						$scope.media=new Media(url,function(){
+							$scope.media.release();
+						});
+					}
+					else{
+						$scope.media=new Audio(url);
+					}
 										$scope.media.play();
 									});
-								},1000);
+								},500);
 							});
-						},1000);
-					}
+						},500);
+					
 				});
-			},500);
+			},600);
 			});
 	};
+	// $scope.playSound=function(){
+	// 	if(!$scope.numbers){
+	// 		$scope.number=$scope.numbers=[7,7,7];
+	// 		while($scope.numbers[0]==7||$scope.numbers[1]==7||$scope.numbers[2]==7){
+	// 			$scope.numbers[0] = Math.floor(Math.random()*9)+1;
+	// 			$scope.numbers[1] = Math.floor(Math.random()*9)+1;
+	// 			$scope.numbers[2] = Math.floor(Math.random()*9)+1;
+	// 		}
+	// 		if(!$scope.testResult){
+	// 			$scope.loudness=0;				
+	// 				$scope.testResult={id: $localStorage.numOfTestResults, date: d.toLocaleDateString(), score: 0, data:[]};
+	// 				$scope.testResult.data.length=24;
+				
+	// 		}
+	// 	}
+	// 	$ionicPlatform.ready(function(){
+	// 		if(ionic.Platform.isIOS()){
+	// 			var ref = firebase.storage().ref('Audio/Male');
+	// 		}
+	// 		else{
+	// 			var ref = firebase.storage().ref('Audio/Male-Digits');
+	// 		}
+	// 		setTimeout(function(){
+	// 		if(!ionic.Platform.isIOS()){
+	// 			$scope.noise.play();
+	// 		}
+	// 		ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
+	// 				console.log(url);
+	// 				if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+	// 				{
+	// 					$scope.media=new Media(url,function onSuccess(){
+	// 						$scope.media.release();
+	// 						ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
+	// 							console.log(url);
+	// 								$scope.media=new Media(url,function onSuccess(){
+	// 									$scope.media.release();
+	// 									ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
+	// 										console.log(url);
+	// 										$scope.media=new Media(url,function onSuccess(){$scope.media.release();});
+	// 										$scope.media.play();
+	// 									});
+	// 								});
+	// 							$scope.media.play();
+	// 						});
+	// 					});
+	// 				$scope.media.play();
+	// 				}
+	// 				else{
+	// 					$scope.media=new Audio(url);
+	// 					$scope.media.play();
+	// 					setTimeout(function(){
+	// 						ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
+	// 							$scope.media=new Audio(url);
+	// 							$scope.media.play();
+	// 							setTimeout(function(){
+	// 								ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
+	// 									$scope.media=new Audio(url);
+	// 									$scope.media.play();
+	// 								});
+	// 							},1000);
+	// 						});
+	// 					},1000);
+	// 				}
+	// 			});
+	// 		},500);
+	// 		});
+	// };
 	
 	 $scope.submit=function(){ 
 	 	if($scope.numbers&&document.getElementById("guess1").value&&document.getElementById("guess2").value&&document.getElementById("guess3").value){
@@ -173,10 +239,10 @@ $ionicPlatform.ready(function(){
 		 	delete $localStorage.pastResult; 
 		 	$scope.count = 0;
 		 	var sum = 0;
-			for(i=0;i<$scope.testResult.data.length;i++){
+			for(i=4;i<$scope.testResult.data.length;i++){
 				sum += $scope.testResult.data[i];
 			}
-			$scope.testResult.score = Math.round(sum/$scope.testResult.data.length*100)/100;
+			$scope.testResult.score = Math.round(sum/($scope.testResult.data.length-4)*100)/100;
 			firebase.database().ref('users/'+$scope.userID+'/testresults/'+$scope.testResult.id).set($scope.testResult);
 		 	$scope.id=$scope.testResult.id;
 		 	$localStorage.numOfTestResults=$scope.testResult.id;
@@ -213,6 +279,7 @@ $ionicPlatform.ready(function(){
 					$scope.data[0].push($scope.results[i].score);
 					$scope.labels.push("");
 					sum += $scope.results[i].score;
+					$scope.$apply();
 				}
 			}
 			$scope.avgThreshold = Math.round(sum/($scope.results.length)*100)/100;
@@ -257,12 +324,53 @@ $ionicPlatform.ready(function(){
 				document.getElementById("lastname").value=$scope.info.lastname;
 				document.getElementById("sex").value=$scope.info.sex;
 				document.getElementById("dob").value=$scope.info.dob;
+				document.getElementById("occupation").value=$scope.info.occupation;
+				document.getElementById("residence").value=$scope.info.residence;
+				document.getElementById("ethnicity").value=$scope.info.ethnicity;
+				document.getElementById("ses").value=$scope.info.ses;
+				document.getElementById("hearinghistory").value=$scope.info.hearinghistory;
+				document.getElementById("authistory").value=$scope.info.authistory;
+				document.getElementById("hunting").value=$scope.info.hunting;
+				document.getElementById("area").value=$scope.info.area;
+				document.getElementById("Q1").value=$scope.info.Q1;
+				document.getElementById("Q2").value=$scope.info.Q2;
+				document.getElementById("Q3").value=$scope.info.Q3;
+				document.getElementById("Q4").value=$scope.info.Q4;
+				document.getElementById("Q5").value=$scope.info.Q5;
+				document.getElementById("Q6").value=$scope.info.Q6;
+				document.getElementById("Q7").value=$scope.info.Q7;
+				document.getElementById("Q8").value=$scope.info.Q8;
+				document.getElementById("Q9").value=$scope.info.Q9;
+				document.getElementById("Q10").value=$scope.info.Q10;
+				document.getElementById("Q11").value=$scope.info.Q11;
+				document.getElementById("Q12").value=$scope.info.Q12;
 			}
 			else{
 				document.getElementById("firstname").value="";
 				document.getElementById("lastname").value="";
 				document.getElementById("sex").value="";
 				document.getElementById("dob").value="";
+				document.getElementById("occupation").value="";
+				document.getElementById("residence").value="";
+				document.getElementById("ethnicity").value="";
+				document.getElementById("ses").value="";
+				document.getElementById("hearinghistory").value="";
+				document.getElementById("authistory").value="";
+				document.getElementById("hunting").value="";
+				document.getElementById("area").value="";
+				document.getElementById("Q1").value="";
+				document.getElementById("Q2").value="";
+				document.getElementById("Q3").value="";
+				document.getElementById("Q4").value="";
+				document.getElementById("Q5").value="";
+				document.getElementById("Q6").value="";
+				document.getElementById("Q7").value="";
+				document.getElementById("Q8").value="";
+				document.getElementById("Q9").value="";
+				document.getElementById("Q10").value="";
+				document.getElementById("Q11").value="";
+				document.getElementById("Q12").value="";
+				
 				if($localStorage.names){
 					document.getElementById("firstname").value=$localStorage.names[0];
 					document.getElementById("lastname").value=$localStorage.names[$localStorage.names.length-1];
@@ -276,7 +384,27 @@ $ionicPlatform.ready(function(){
 				firstname: document.getElementById("firstname").value, 
 				lastname: document.getElementById("lastname").value,
 				sex: document.getElementById("sex").value,
-				dob: document.getElementById("dob").value
+				dob: document.getElementById("dob").value,
+				occupation: document.getElementById("occupation").value,
+				residence: document.getElementById("residence").value,
+				ethnicity: document.getElementById("ethnicity").value,
+				ses: document.getElementById("ses").value,
+				hearinghistory: document.getElementById("hearinghistory").value,
+				authistory: document.getElementById("authistory").value,
+				hunting: document.getElementById("hunting").value,
+				area: document.getElementById("area").value,
+				Q1: document.getElementById("Q1").value,
+				Q2: document.getElementById("Q2").value,
+				Q3: document.getElementById("Q3").value,
+				Q4: document.getElementById("Q4").value,
+				Q5: document.getElementById("Q5").value,
+				Q6: document.getElementById("Q6").value,
+				Q7: document.getElementById("Q7").value,
+				Q8: document.getElementById("Q8").value,
+				Q9: document.getElementById("Q9").value,
+				Q10: document.getElementById("Q10").value,
+				Q11: document.getElementById("Q11").value,
+				Q12: document.getElementById("Q12").value
 			});
 		$state.go('mainmenu');
 	};
@@ -361,7 +489,7 @@ $ionicPlatform.ready(function(){
 	};
 	$scope.testDates={};
 	$scope.getTestDates=function(){
-		$scope.i=0;
+		$scope.i=-1;
 		$scope.testDates.tds=[];
 		$scope.getTestDate();
 	}
