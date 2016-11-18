@@ -257,12 +257,53 @@ $ionicPlatform.ready(function(){
 				document.getElementById("lastname").value=$scope.info.lastname;
 				document.getElementById("sex").value=$scope.info.sex;
 				document.getElementById("dob").value=$scope.info.dob;
+				document.getElementById("occupation").value=$scope.info.occupation;
+				document.getElementById("residence").value=$scope.info.residence;
+				document.getElementById("ethnicity").value=$scope.info.ethnicity;
+				document.getElementById("ses").value=$scope.info.ses;
+				document.getElementById("hearinghistory").value=$scope.info.hearinghistory;
+				document.getElementById("authistory").value=$scope.info.authistory;
+				document.getElementById("hunting").value=$scope.info.hunting;
+				document.getElementById("area").value=$scope.info.area;
+				document.getElementById("Q1").value=$scope.info.Q1;
+				document.getElementById("Q2").value=$scope.info.Q2;
+				document.getElementById("Q3").value=$scope.info.Q3;
+				document.getElementById("Q4").value=$scope.info.Q4;
+				document.getElementById("Q5").value=$scope.info.Q5;
+				document.getElementById("Q6").value=$scope.info.Q6;
+				document.getElementById("Q7").value=$scope.info.Q7;
+				document.getElementById("Q8").value=$scope.info.Q8;
+				document.getElementById("Q9").value=$scope.info.Q9;
+				document.getElementById("Q10").value=$scope.info.Q10;
+				document.getElementById("Q11").value=$scope.info.Q11;
+				document.getElementById("Q12").value=$scope.info.Q12;
 			}
 			else{
 				document.getElementById("firstname").value="";
 				document.getElementById("lastname").value="";
 				document.getElementById("sex").value="";
 				document.getElementById("dob").value="";
+				document.getElementById("occupation").value="";
+				document.getElementById("residence").value="";
+				document.getElementById("ethnicity").value="";
+				document.getElementById("ses").value="";
+				document.getElementById("hearinghistory").value="";
+				document.getElementById("authistory").value="";
+				document.getElementById("hunting").value="";
+				document.getElementById("area").value="";
+				document.getElementById("Q1").value="";
+				document.getElementById("Q2").value="";
+				document.getElementById("Q3").value="";
+				document.getElementById("Q4").value="";
+				document.getElementById("Q5").value="";
+				document.getElementById("Q6").value="";
+				document.getElementById("Q7").value="";
+				document.getElementById("Q8").value="";
+				document.getElementById("Q9").value="";
+				document.getElementById("Q10").value="";
+				document.getElementById("Q11").value="";
+				document.getElementById("Q12").value="";
+				
 				if($localStorage.names){
 					document.getElementById("firstname").value=$localStorage.names[0];
 					document.getElementById("lastname").value=$localStorage.names[$localStorage.names.length-1];
@@ -276,7 +317,27 @@ $ionicPlatform.ready(function(){
 				firstname: document.getElementById("firstname").value, 
 				lastname: document.getElementById("lastname").value,
 				sex: document.getElementById("sex").value,
-				dob: document.getElementById("dob").value
+				dob: document.getElementById("dob").value,
+				occupation: document.getElementById("occupation").value,
+				residence: document.getElementById("residence").value,
+				ethnicity: document.getElementById("ethnicity").value,
+				ses: document.getElementById("ses").value,
+				hearinghistory: document.getElementById("hearinghistory").value,
+				authistory: document.getElementById("authistory").value,
+				hunting: document.getElementById("hunting").value,
+				area: document.getElementById("area").value,
+				Q1: document.getElementById("Q1").value,
+				Q2: document.getElementById("Q2").value,
+				Q3: document.getElementById("Q3").value,
+				Q4: document.getElementById("Q4").value,
+				Q5: document.getElementById("Q5").value,
+				Q6: document.getElementById("Q6").value,
+				Q7: document.getElementById("Q7").value,
+				Q8: document.getElementById("Q8").value,
+				Q9: document.getElementById("Q9").value,
+				Q10: document.getElementById("Q10").value,
+				Q11: document.getElementById("Q11").value,
+				Q12: document.getElementById("Q12").value
 			});
 		$state.go('mainmenu');
 	};
