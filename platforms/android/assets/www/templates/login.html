@@ -4,17 +4,11 @@
   </ion-header-bar>
   <ion-content>
   <center>
-  <div ng-if="!provider">
   <div style="height:20px"></div>
   <h3>You must sign in with a Google or Facebook account to test your hearing.</h3>
   <div style="height:40px"></div>
   <ion-button class="button button-full button-calm" ng-click="googleLogin()">Log in with Google</ion-button>
   <ion-button class="button button-full button-calm" ng-click="facebookLogin()">Log in with Facebook</ion-button>
-  <div style="height:40px"></div>
-  </div>
-  <h3 ng-if="provider">An account with that email address already exists with {{provider}}.</h3>
-<div style="height:40px"></div>
-  <ion-button ng-if="provider" class="button button-full button-calm" ng-click="goBack()">Go Back</ion-button>
 </center>
   </ion-content>
 </ion-view>

@@ -241,7 +241,7 @@ $ionicPlatform.ready(function(){
 	});
 })
 
-.controller('InformationCtrl', function($scope,$state,$cordovaOauth){
+.controller('InformationCtrl', function($scope,$state,$cordovaOauth,$localStorage){
 	$scope.returnToMain = function(){$state.go('mainmenu')};
 	$scope.logOut=function(){
 		firebase.auth().signOut();
@@ -263,6 +263,10 @@ $ionicPlatform.ready(function(){
 				document.getElementById("lastname").value="";
 				document.getElementById("sex").value="";
 				document.getElementById("dob").value="";
+				if($localStorage.names){
+					document.getElementById("firstname").value=$localStorage.names[0];
+					document.getElementById("lastname").value=$localStorage.names[$localStorage.names.length-1];
+				}
 			}
 		});
 	});
@@ -278,8 +282,9 @@ $ionicPlatform.ready(function(){
 	};
 })
 
-.controller('LoginCtrl',function($scope,$state,$cordovaOauth){
+.controller('LoginCtrl',function($scope,$state,$cordovaOauth,$localStorage){
 	$scope.googleLogin=function(){
+
 		if(!firebase.auth().currentUser)
 		{
 			if(!ionic.Platform.isAndroid()&&!ionic.Platform.isIOS()){
@@ -288,22 +293,13 @@ $ionicPlatform.ready(function(){
 							if(firebase.auth().currentUser){
 								$state.go('mainmenu');
 							}
-						}).catch(function(error){
-							  		if (error.code === 'auth/account-exists-with-different-credential') {
-							  			$scope.provider="Facebook";
-									}
-									console.log(error);
-							});
+						});
 	                }
 	                else{
 	                    $cordovaOauth.google("180218637488-t2or73169ubmhbk0or5r027ct86c1ghr.apps.googleusercontent.com",
 	                    	["email", "profile"]).then(function(result){
 	                    		var credential = firebase.auth.GoogleAuthProvider.credential(result.id_token,result.access_token);
-	                    		firebase.auth().signInWithCredential(credential).catch(function(error){
-							  		if (error.code === 'auth/account-exists-with-different-credential') {
-							  			$scope.provider="Facebook";
-									}
-								});
+	                    		firebase.auth().signInWithCredential(credential);
 	                    		if(firebase.auth().currentUser){
 	                    			$state.go('mainmenu');
 	                    		}
@@ -320,33 +316,24 @@ $ionicPlatform.ready(function(){
 							if(firebase.auth().currentUser){
 								$state.go('mainmenu');
 							}
-						}).catch(function(error){
-							  		if (error.code === 'auth/account-exists-with-different-credential') {
-							  			$scope.provider="Google";
-							  			$scope.$apply();
-									}
-							});
+						 });
 	                }
 	                else{
 	                    $cordovaOauth.facebook("1808012456144830",
 	                    	["email"]).then(function(result){
 	                    		var credential = firebase.auth.FacebookAuthProvider.credential(result.access_token);
-	                    		firebase.auth().signInWithCredential(credential).catch(function(error){
-							  		if (error.code === 'auth/account-exists-with-different-credential') {
-							  			$scope.provider="Google";
-							  			$scope.$apply();
-									}
-								});
-	                    		
-	                    	},function(error){console.log(error);});
+	                     		firebase.auth().signInWithCredential(credential);
 	                    	if(firebase.auth().currentUser){
 	                    		$state.go('mainmenu');
 	                    	}
+	                });
+	                    }
 	                }
-		}
+		
 	};
 	firebase.auth().onAuthStateChanged(function(user){
 		if(user){
+			$localStorage.names=user.providerData[0].displayName.split(" ");
 			$state.go('mainmenu');
 		}
 		});
@@ -354,7 +341,33 @@ $ionicPlatform.ready(function(){
 		$scope.provider=null;
 	}
 })
-.controller('SchedulerCtrl', function($scope,$state,$ionicPlatform){
+.controller('SchedulerCtrl', function($scope,$state,$ionicPlatform,$window){
+	$scope.getTestDate=function(){
+		$ionicPlatform.ready(function(){
+				window.plugins.calendar.findEvent('HearMe Test',null,null,new Date(Date.now()+86400000*$scope.i),new Date(Date.now()+86400000*$scope.i),function(result){
+					if(result[0]){
+						var testDate = new Date(Date.parse(result[0].startDate)+86400000).toLocaleDateString();
+						console.log(testDate);
+						$scope.testDates.tds.push(testDate);
+						$scope.$apply();
+						console.log($scope.testDates.tds);
+					}
+					$scope.i++;
+					if($scope.i<365){
+						$scope.getTestDate();
+					}
+				});
+		});
+	};
+	$scope.testDates={};
+	$scope.getTestDates=function(){
+		$scope.i=0;
+		$scope.testDates.tds=[];
+		$scope.getTestDate();
+	}
+	if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
+		$scope.getTestDates();
+	}
 	$scope.scheduleTest=function(){
 		$ionicPlatform.ready(function(){
 			if(document.getElementById("myDate").value){
@@ -372,18 +385,25 @@ $ionicPlatform.ready(function(){
 				var endDate = new Date(Date.parse($scope.startDate));
 				if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
 					window.plugins.calendar.createEventInteractively("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
-						$scope.successMessage=$scope.date.toLocaleDateString()+".";
+						$scope.getTestDates();
 						document.getElementById("myDate").value=document.getElementById("myDate").defaultValue;
+						$scope.successMessage=$scope.date.toLocaleDateString()+".";
 						$scope.$apply();
 					});
 				}
 			}
 		});
 	};
+	$scope.goToTestEvent=function(date){
+		$scope.date=new Date(Date.parse(date));
+		console.log($scope.date);
+		$scope.goToCalendar();
+		$scope.date=null;
+	}
 	$scope.goToCalendar=function(){
 		if(ionic.Platform.isAndroid()||ionic.Platform.isIOS()){
 			$ionicPlatform.ready(function(){
-				if($scope.startDate){
+				if($scope.date){
 					window.plugins.calendar.openCalendar($scope.date);
 				}
 				else{
@@ -391,6 +411,10 @@ $ionicPlatform.ready(function(){
 				}
 			});
 		}
+	};
+	$scope.delete=function(date){
+		window.plugins.calendar.deleteEvent("HearMe Test",null,null,new Date(Date.parse(date)),new Date(Date.parse(date)));
+		$scope.getTestDates();
 	};
 	$scope.returnToMain = function(){
 		$scope.successMessage=null;

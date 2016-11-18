@@ -13,5 +13,17 @@
   	<div ng-if="!successMessage" style="height:35px"></div>
 	<button class="button button-calm button-full" ng-click="scheduleTest()">Schedule</button>
 	<button class="button button-calm button-full" ng-click="goToCalendar()">Open Calendar</button>
+	<div style="height:20px";></div>
+	<center>
+		<h4><u>Future Scheduled Tests</u></h2>
+		<ion-list>
+			<ion-item ng-repeat="date in testDates.tds" ng-click="goToTestEvent(date)">
+			<p style="text-align:left;">
+                {{date}}
+            </p>
+            <ion-option-button class="button-assertive" ng-click="delete(date)">Delete</ion-option-button>
+			</ion-item>
+		</ion-list>
+	</center>
 </ion-content>
 

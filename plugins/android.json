@@ -50,6 +50,9 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
         }
     },
     "dependent_plugins": {

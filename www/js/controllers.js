@@ -43,7 +43,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	};
 })
 
-.controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform){
+.controller('TestCtrl', function($scope,$state,$localStorage,$ionicPlatform,$cordovaFileTransfer){
 	$scope.count=0;
 	firebase.auth().onAuthStateChanged(function(){
 		$scope.userID=firebase.auth().currentUser.uid;
@@ -97,50 +97,116 @@ $ionicPlatform.ready(function(){
 			}
 		}
 		$ionicPlatform.ready(function(){
-			var ref = firebase.storage().ref('Audio/Male-Digits');
-			$scope.noise.play();
+				var ref = firebase.storage().ref('Audio/Male');
 			setTimeout(function(){
 			ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
 					console.log(url);
 					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 					{
-						$scope.media=new Media(url,function onSuccess(){
-							$scope.media.release();
-							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
-								console.log(url);
-									$scope.media=new Media(url,function onSuccess(){
-										$scope.media.release();
-										ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
-											console.log(url);
-											$scope.media=new Media(url,function onSuccess(){$scope.media.release();});
-											$scope.media.play();
-										});
-									});
-								$scope.media.play();
-							});
-						});
-					$scope.media.play();
+						$scope.media=new Media(url);
 					}
 					else{
 						$scope.media=new Audio(url);
+					}
 						$scope.media.play();
 						setTimeout(function(){
 							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
-								$scope.media=new Audio(url);
+								if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+					{
+						$scope.media=new Media(url);
+					}
+					else{
+						$scope.media=new Audio(url);
+					}
 								$scope.media.play();
 								setTimeout(function(){
 									ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
-										$scope.media=new Audio(url);
+										if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+					{
+						$scope.media=new Media(url,function(){
+							$scope.media.release();
+						});
+					}
+					else{
+						$scope.media=new Audio(url);
+					}
 										$scope.media.play();
 									});
-								},1000);
+								},500);
 							});
-						},1000);
-					}
+						},500);
+					
 				});
-			},500);
+			},600);
 			});
 	};
+	// $scope.playSound=function(){
+	// 	if(!$scope.numbers){
+	// 		$scope.number=$scope.numbers=[7,7,7];
+	// 		while($scope.numbers[0]==7||$scope.numbers[1]==7||$scope.numbers[2]==7){
+	// 			$scope.numbers[0] = Math.floor(Math.random()*9)+1;
+	// 			$scope.numbers[1] = Math.floor(Math.random()*9)+1;
+	// 			$scope.numbers[2] = Math.floor(Math.random()*9)+1;
+	// 		}
+	// 		if(!$scope.testResult){
+	// 			$scope.loudness=0;				
+	// 				$scope.testResult={id: $localStorage.numOfTestResults, date: d.toLocaleDateString(), score: 0, data:[]};
+	// 				$scope.testResult.data.length=24;
+				
+	// 		}
+	// 	}
+	// 	$ionicPlatform.ready(function(){
+	// 		if(ionic.Platform.isIOS()){
+	// 			var ref = firebase.storage().ref('Audio/Male');
+	// 		}
+	// 		else{
+	// 			var ref = firebase.storage().ref('Audio/Male-Digits');
+	// 		}
+	// 		setTimeout(function(){
+	// 		if(!ionic.Platform.isIOS()){
+	// 			$scope.noise.play();
+	// 		}
+	// 		ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
+	// 				console.log(url);
+	// 				if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
+	// 				{
+	// 					$scope.media=new Media(url,function onSuccess(){
+	// 						$scope.media.release();
+	// 						ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
+	// 							console.log(url);
+	// 								$scope.media=new Media(url,function onSuccess(){
+	// 									$scope.media.release();
+	// 									ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
+	// 										console.log(url);
+	// 										$scope.media=new Media(url,function onSuccess(){$scope.media.release();});
+	// 										$scope.media.play();
+	// 									});
+	// 								});
+	// 							$scope.media.play();
+	// 						});
+	// 					});
+	// 				$scope.media.play();
+	// 				}
+	// 				else{
+	// 					$scope.media=new Audio(url);
+	// 					$scope.media.play();
+	// 					setTimeout(function(){
+	// 						ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
+	// 							$scope.media=new Audio(url);
+	// 							$scope.media.play();
+	// 							setTimeout(function(){
+	// 								ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
+	// 									$scope.media=new Audio(url);
+	// 									$scope.media.play();
+	// 								});
+	// 							},1000);
+	// 						});
+	// 					},1000);
+	// 				}
+	// 			});
+	// 		},500);
+	// 		});
+	// };
 	
 	 $scope.submit=function(){ 
 	 	if($scope.numbers&&document.getElementById("guess1").value&&document.getElementById("guess2").value&&document.getElementById("guess3").value){
@@ -213,6 +279,7 @@ $ionicPlatform.ready(function(){
 					$scope.data[0].push($scope.results[i].score);
 					$scope.labels.push("");
 					sum += $scope.results[i].score;
+					$scope.$apply();
 				}
 			}
 			$scope.avgThreshold = Math.round(sum/($scope.results.length)*100)/100;
@@ -361,7 +428,7 @@ $ionicPlatform.ready(function(){
 	};
 	$scope.testDates={};
 	$scope.getTestDates=function(){
-		$scope.i=0;
+		$scope.i=-1;
 		$scope.testDates.tds=[];
 		$scope.getTestDate();
 	}
