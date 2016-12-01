@@ -20,11 +20,13 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	});
 })
 
-.controller('InstructionsCtrl',function($scope,$state){
+.controller('InstructionsCtrl',function($scope,$state,$localStorage){
 	$scope.startTest=function(){
 		$scope.media.pause();
+		$localStorage.noiseType = document.getElementById("noiseType").value;
 		$state.go('test');
 	};
+	document.getElementById("noiseType").value="WhiteNoise";
 	firebase.storage().ref('Audio/noise.wav').getDownloadURL().then(function(url){
 			if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 			{
@@ -97,48 +99,23 @@ $ionicPlatform.ready(function(){
 			}
 		}
 		$ionicPlatform.ready(function(){
-				var ref = firebase.storage().ref('Audio/Male');
-			setTimeout(function(){
-			ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
+				var ref = firebase.storage().ref('Audio/'+$localStorage.noiseType+"-Digits");
+			ref.child($scope.loudness+'SNR/'+$scope.numbers[0]+$scope.numbers[1]+$scope.numbers[2]+'.wav').getDownloadURL().then(function(url){
 					console.log(url);
 					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 					{
 						$scope.media=new Media(url,function onSuccess(){
 							$scope.media.release();
-							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
-								console.log(url);
-									$scope.media=new Media(url,function onSuccess(){
-										$scope.media.release();
-										ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
-											console.log(url);
-											$scope.media=new Media(url,function onSuccess(){$scope.media.release();});
-											$scope.media.play();
-										});
-									});
-								$scope.media.play();
-							});
 						});
-					$scope.media.play();
+						$scope.media.play();
 					}
 					else{
 						$scope.media=new Audio(url);
 						$scope.media.play();
-						setTimeout(function(){
-							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
-								$scope.media=new Audio(url);
-								$scope.media.play();
-								setTimeout(function(){
-									ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
-										$scope.media=new Audio(url);
-										$scope.media.play();
-									});
-								},1000);
-							});
-						},1000);
 					}
 				});
-			},500);
-			});
+		});
+
 	};
 	
 	 $scope.submit=function(){ 
@@ -147,7 +124,7 @@ $ionicPlatform.ready(function(){
 	 		console.log($scope.testResult.data);
 	 		$scope.count++;
 	 		if(document.getElementById("guess1").value==$scope.numbers[0]&&document.getElementById("guess2").value==$scope.numbers[1]&&document.getElementById("guess3").value==$scope.numbers[2]){
-	 			if($scope.loudness!=-30){
+	 			if($scope.loudness!=-20){
 	 				$scope.loudness=$scope.loudness-2;
 	 			}
 	 		}
@@ -176,6 +153,7 @@ $ionicPlatform.ready(function(){
 				sum += $scope.testResult.data[i];
 			}
 			$scope.testResult.score = Math.round(sum/($scope.testResult.data.length-4)*100)/100;
+			$scope.testResult.noiseType=$localStorage.noiseType;
 			firebase.database().ref('users/'+$scope.userID+'/testresults/'+$scope.testResult.id).set($scope.testResult);
 		 	$scope.id=$scope.testResult.id;
 		 	$localStorage.numOfTestResults=$scope.testResult.id;
@@ -405,11 +383,19 @@ $ionicPlatform.ready(function(){
 .controller('SchedulerCtrl', function($scope,$state,$ionicPlatform,$window){
 	$scope.getTestDate=function(){
 		$ionicPlatform.ready(function(){
-				window.plugins.calendar.findEvent('HearMe Test',null,null,new Date(Date.now()+86400000*$scope.i),new Date(Date.now()+86400000*$scope.i),function(result){
+				if(ionic.Platform.isIOS()){
+					var off = -1;
+				}
+				else{
+					var off = 0;
+				}
+				window.plugins.calendar.findEvent('HearMe Test',null,null,new Date(Date.now()+86400000*$scope.i),new Date(Date.now()+86400000*($scope.i-off)),function(result){
 					if(result[0]){
 						var testDate = new Date(Date.parse(result[0].startDate)+86400000).toLocaleDateString();
 						console.log(testDate);
-						$scope.testDates.tds.push(testDate);
+						if(testDate != "Invalid Date"){
+							$scope.testDates.tds.push(testDate);
+						}
 						$scope.$apply();
 						console.log($scope.testDates.tds);
 					}
@@ -441,7 +427,7 @@ $ionicPlatform.ready(function(){
 				}
 				if(ionic.Platform.isIOS()){
 					$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000);
-					$scope.date=new Date(Date.parse($scope.startDate));
+					$scope.date=new Date(Date.parse($scope.startDate)+86400000);
 				}
 				var endDate = new Date(Date.parse($scope.startDate));
 				if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
