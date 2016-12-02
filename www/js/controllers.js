@@ -27,7 +27,9 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 		$state.go('test');
 	};
 	document.getElementById("noiseType").value="WhiteNoise";
-	firebase.storage().ref('Audio/noise.wav').getDownloadURL().then(function(url){
+	$scope.playSound=function(){
+		console.log('Audio/'+document.getElementById("noiseType").value.toLowerCase()+".wav");
+		firebase.storage().ref('Audio/'+document.getElementById("noiseType").value.toLowerCase()+".wav").getDownloadURL().then(function(url){
 			if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 			{
 				$scope.media=new Media(url);
@@ -36,7 +38,6 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				$scope.media=new Audio(url);
 			}
 		});
-	$scope.playSound=function(){
 		$scope.media.play();
 	};
 	$scope.returnToMain=function(){
@@ -424,12 +425,14 @@ $ionicPlatform.ready(function(){
 				if(ionic.Platform.isAndroid()){
 					$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000+86400000);
 					$scope.date=new Date(Date.parse($scope.startDate)-86400000);
+					var endDate = new Date(Date.parse($scope.startDate));
 				}
 				if(ionic.Platform.isIOS()){
 					$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000);
-					$scope.date=new Date(Date.parse($scope.startDate)+86400000);
+					$scope.date=new Date(Date.parse($scope.startDate));
+					var endDate = new Date(Date.parse($scope.startDate)+86400000);
 				}
-				var endDate = new Date(Date.parse($scope.startDate));
+				
 				if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
 					window.plugins.calendar.createEventInteractively("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
 						$scope.getTestDates();
