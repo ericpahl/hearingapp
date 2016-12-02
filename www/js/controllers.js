@@ -390,7 +390,7 @@ $ionicPlatform.ready(function(){
 				else{
 					var off = 0;
 				}
-				window.plugins.calendar.findEvent('HearMe Test',null,null,new Date(Date.now()+86400000*$scope.i),new Date(Date.now()+86400000*($scope.i-off)),function(result){
+				window.plugins.calendar.findEvent('HearMe Test',null,null,new Date(Date.now()+86400000*$scope.i),new Date(Date.now()+86400000*($scope.i+off)),function(result){
 					if(result[0]){
 						var testDate = new Date(Date.parse(result[0].startDate)+86400000).toLocaleDateString();
 						console.log(testDate);
