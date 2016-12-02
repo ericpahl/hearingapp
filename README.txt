@@ -69,6 +69,7 @@ For further reference about the test we are trying to implement, see the followi
 -Fixed bug related to the scheduling feature; the event will now be scheduled interactively instead of silently
 -The scheduling screen will now display a list of all events in the native calendar titled "HearMe Test"; tapping the event in the list will open the calendar on the day of the event
 -The first time a user updates their information in the "Update Information" screen, the name field will be prepopulated based on the user's Google or Facebook account information. This will occur until the user saves their information.
+-Begin implementing testing options in other simulated noises and environments (babble, restaurants, streets, subways, cars, trains, exhibitions, etc.)
 
 
 
