@@ -32,13 +32,17 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 		firebase.storage().ref('Audio/'+document.getElementById("noiseType").value.toLowerCase()+".wav").getDownloadURL().then(function(url){
 			if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 			{
-				$scope.media=new Media(url);
+				$scope.media=new Media(url,function onSuccess(){
+							$scope.media.release();
+						});
+				$scope.media.play();
 			}
 			else{
 				$scope.media=new Audio(url);
+				$scope.media.play();
 			}
 		});
-		$scope.media.play();
+	
 	};
 	$scope.returnToMain=function(){
 		$scope.media.pause();
