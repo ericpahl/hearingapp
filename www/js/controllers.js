@@ -129,7 +129,7 @@ $ionicPlatform.ready(function(){
 	 		console.log($scope.testResult.data);
 	 		$scope.count++;
 	 		if(document.getElementById("guess1").value==$scope.numbers[0]&&document.getElementById("guess2").value==$scope.numbers[1]&&document.getElementById("guess3").value==$scope.numbers[2]){
-	 			if($scope.loudness!=-20){
+	 			if($scope.loudness!=-30){
 	 				$scope.loudness=$scope.loudness-2;
 	 			}
 	 		}
@@ -238,16 +238,20 @@ $ionicPlatform.ready(function(){
 			if($scope.info){
 				document.getElementById("firstname").value=$scope.info.firstname;
 				document.getElementById("lastname").value=$scope.info.lastname;
+				document.getElementById("subjectid").value=$scope.info.subjectid;
 				document.getElementById("sex").value=$scope.info.sex;
-				document.getElementById("dob").value=$scope.info.dob;
+				document.getElementById("age").value=$scope.info.age;
+				document.getElementById("email").value=$scope.info.email;
 				document.getElementById("occupation").value=$scope.info.occupation;
 				document.getElementById("residence").value=$scope.info.residence;
+				document.getElementById("country").value=$scope.info.country;
 				document.getElementById("ethnicity").value=$scope.info.ethnicity;
 				document.getElementById("ses").value=$scope.info.ses;
 				document.getElementById("hearinghistory").value=$scope.info.hearinghistory;
-				document.getElementById("authistory").value=$scope.info.authistory;
 				document.getElementById("hunting").value=$scope.info.hunting;
 				document.getElementById("area").value=$scope.info.area;
+				document.getElementById("currconditions").value=$scope.info.currconditions;
+				document.getElementById("currmeds").value=$scope.info.currmeds;
 				document.getElementById("Q1").value=$scope.info.Q1;
 				document.getElementById("Q2").value=$scope.info.Q2;
 				document.getElementById("Q3").value=$scope.info.Q3;
@@ -260,20 +264,30 @@ $ionicPlatform.ready(function(){
 				document.getElementById("Q10").value=$scope.info.Q10;
 				document.getElementById("Q11").value=$scope.info.Q11;
 				document.getElementById("Q12").value=$scope.info.Q12;
+				document.getElementById("Q13").value=$scope.info.Q13;
+				document.getElementById("Q14").value=$scope.info.Q14;
+				document.getElementById("Q15").value=$scope.info.Q15;
+				document.getElementById("Q16").value=$scope.info.Q16;
+				document.getElementById("Q17").value=$scope.info.Q17;
+				document.getElementById("Q18").value=$scope.info.Q18;
+				document.getElementById("consent").value=$scope.info.consent;
 			}
 			else{
 				document.getElementById("firstname").value="";
 				document.getElementById("lastname").value="";
+				document.getElementById("subjectid").value="";
 				document.getElementById("sex").value="";
-				document.getElementById("dob").value="";
+				document.getElementById("age").value="";
 				document.getElementById("occupation").value="";
 				document.getElementById("residence").value="";
+				document.getElementById("country").value="";
 				document.getElementById("ethnicity").value="";
 				document.getElementById("ses").value="";
 				document.getElementById("hearinghistory").value="";
-				document.getElementById("authistory").value="";
 				document.getElementById("hunting").value="";
 				document.getElementById("area").value="";
+				document.getElementById("currconditions").value="";
+				document.getElementById("currmeds").value="";
 				document.getElementById("Q1").value="";
 				document.getElementById("Q2").value="";
 				document.getElementById("Q3").value="";
@@ -286,6 +300,14 @@ $ionicPlatform.ready(function(){
 				document.getElementById("Q10").value="";
 				document.getElementById("Q11").value="";
 				document.getElementById("Q12").value="";
+				document.getElementById("Q13").value="";
+				document.getElementById("Q14").value="";
+				document.getElementById("Q15").value="";
+				document.getElementById("Q16").value="";
+				document.getElementById("Q17").value="";
+				document.getElementById("Q18").value="";
+				document.getElementById("consent").value="";
+
 				
 				if($localStorage.names){
 					document.getElementById("firstname").value=$localStorage.names[0];
@@ -299,16 +321,20 @@ $ionicPlatform.ready(function(){
 			{
 				firstname: document.getElementById("firstname").value, 
 				lastname: document.getElementById("lastname").value,
+				subjectid: document.getElementById("subjectid").value,
 				sex: document.getElementById("sex").value,
-				dob: document.getElementById("dob").value,
+				age: document.getElementById("age").value,
+				email: document.getElementById("email").value,
 				occupation: document.getElementById("occupation").value,
 				residence: document.getElementById("residence").value,
+				country: document.getElementById("country").value,
 				ethnicity: document.getElementById("ethnicity").value,
 				ses: document.getElementById("ses").value,
 				hearinghistory: document.getElementById("hearinghistory").value,
-				authistory: document.getElementById("authistory").value,
 				hunting: document.getElementById("hunting").value,
 				area: document.getElementById("area").value,
+				currconditions: document.getElementById("currconditions").value,
+				currmeds: document.getElementById("currmeds").value,
 				Q1: document.getElementById("Q1").value,
 				Q2: document.getElementById("Q2").value,
 				Q3: document.getElementById("Q3").value,
@@ -320,7 +346,15 @@ $ionicPlatform.ready(function(){
 				Q9: document.getElementById("Q9").value,
 				Q10: document.getElementById("Q10").value,
 				Q11: document.getElementById("Q11").value,
-				Q12: document.getElementById("Q12").value
+				Q12: document.getElementById("Q12").value,
+				Q13: document.getElementById("Q13").value,
+				Q14: document.getElementById("Q14").value,
+				Q15: document.getElementById("Q15").value,
+				Q16: document.getElementById("Q16").value,
+				Q17: document.getElementById("Q17").value,
+				Q18: document.getElementById("Q18").value,
+				consent: document.getElementById("consent").value
+
 			});
 		$state.go('mainmenu');
 	};
