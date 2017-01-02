@@ -20,25 +20,34 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	});
 })
 
-.controller('InstructionsCtrl',function($scope,$state){
+.controller('InstructionsCtrl',function($scope,$state,$localStorage){
 	$scope.startTest=function(){
 		$scope.media.pause();
+		$localStorage.noiseType = document.getElementById("noiseType").value;
 		$state.go('test');
 	};
-	firebase.storage().ref('Audio/noise.wav').getDownloadURL().then(function(url){
+	document.getElementById("noiseType").value="WhiteNoise";
+	$scope.playSound=function(){
+		console.log('Audio/'+document.getElementById("noiseType").value.toLowerCase()+".wav");
+		firebase.storage().ref('Audio/'+document.getElementById("noiseType").value.toLowerCase()+".wav").getDownloadURL().then(function(url){
 			if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 			{
-				$scope.media=new Media(url);
+				$scope.media=new Media(url,function onSuccess(){
+							$scope.media.release();
+						});
+				$scope.media.play();
 			}
 			else{
 				$scope.media=new Audio(url);
+				$scope.media.play();
 			}
 		});
-	$scope.playSound=function(){
-		$scope.media.play();
+	
 	};
 	$scope.returnToMain=function(){
+		if($scope.media){
 		$scope.media.pause();
+	}
 		$state.go('mainmenu');
 	};
 })
@@ -97,48 +106,23 @@ $ionicPlatform.ready(function(){
 			}
 		}
 		$ionicPlatform.ready(function(){
-				var ref = firebase.storage().ref('Audio/Male');
-			setTimeout(function(){
-			ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[0]+'A.wav').getDownloadURL().then(function(url){
+				var ref = firebase.storage().ref('Audio/'+$localStorage.noiseType+"-Digits");
+			ref.child($scope.loudness+'SNR/'+$scope.numbers[0]+$scope.numbers[1]+$scope.numbers[2]+'.wav').getDownloadURL().then(function(url){
 					console.log(url);
 					if(ionic.Platform.isAndroid()||ionic.Platform.isIOS())
 					{
 						$scope.media=new Media(url,function onSuccess(){
 							$scope.media.release();
-							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
-								console.log(url);
-									$scope.media=new Media(url,function onSuccess(){
-										$scope.media.release();
-										ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
-											console.log(url);
-											$scope.media=new Media(url,function onSuccess(){$scope.media.release();});
-											$scope.media.play();
-										});
-									});
-								$scope.media.play();
-							});
 						});
-					$scope.media.play();
+						$scope.media.play();
 					}
 					else{
 						$scope.media=new Audio(url);
 						$scope.media.play();
-						setTimeout(function(){
-							ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[1]+'A.wav').getDownloadURL().then(function(url){
-								$scope.media=new Audio(url);
-								$scope.media.play();
-								setTimeout(function(){
-									ref.child($scope.loudness+'SNR/MAE_'+$scope.numbers[2]+'A.wav').getDownloadURL().then(function(url){
-										$scope.media=new Audio(url);
-										$scope.media.play();
-									});
-								},1000);
-							});
-						},1000);
 					}
 				});
-			},500);
-			});
+		});
+
 	};
 	
 	 $scope.submit=function(){ 
@@ -176,6 +160,7 @@ $ionicPlatform.ready(function(){
 				sum += $scope.testResult.data[i];
 			}
 			$scope.testResult.score = Math.round(sum/($scope.testResult.data.length-4)*100)/100;
+			$scope.testResult.noiseType=$localStorage.noiseType;
 			firebase.database().ref('users/'+$scope.userID+'/testresults/'+$scope.testResult.id).set($scope.testResult);
 		 	$scope.id=$scope.testResult.id;
 		 	$localStorage.numOfTestResults=$scope.testResult.id;
@@ -255,16 +240,20 @@ $ionicPlatform.ready(function(){
 			if($scope.info){
 				document.getElementById("firstname").value=$scope.info.firstname;
 				document.getElementById("lastname").value=$scope.info.lastname;
+				document.getElementById("subjectid").value=$scope.info.subjectid;
 				document.getElementById("sex").value=$scope.info.sex;
-				document.getElementById("dob").value=$scope.info.dob;
+				document.getElementById("age").value=$scope.info.age;
+				document.getElementById("email").value=$scope.info.email;
 				document.getElementById("occupation").value=$scope.info.occupation;
 				document.getElementById("residence").value=$scope.info.residence;
+				document.getElementById("country").value=$scope.info.country;
 				document.getElementById("ethnicity").value=$scope.info.ethnicity;
 				document.getElementById("ses").value=$scope.info.ses;
 				document.getElementById("hearinghistory").value=$scope.info.hearinghistory;
-				document.getElementById("authistory").value=$scope.info.authistory;
 				document.getElementById("hunting").value=$scope.info.hunting;
 				document.getElementById("area").value=$scope.info.area;
+				document.getElementById("currconditions").value=$scope.info.currconditions;
+				document.getElementById("currmeds").value=$scope.info.currmeds;
 				document.getElementById("Q1").value=$scope.info.Q1;
 				document.getElementById("Q2").value=$scope.info.Q2;
 				document.getElementById("Q3").value=$scope.info.Q3;
@@ -277,20 +266,30 @@ $ionicPlatform.ready(function(){
 				document.getElementById("Q10").value=$scope.info.Q10;
 				document.getElementById("Q11").value=$scope.info.Q11;
 				document.getElementById("Q12").value=$scope.info.Q12;
+				document.getElementById("Q13").value=$scope.info.Q13;
+				document.getElementById("Q14").value=$scope.info.Q14;
+				document.getElementById("Q15").value=$scope.info.Q15;
+				document.getElementById("Q16").value=$scope.info.Q16;
+				document.getElementById("Q17").value=$scope.info.Q17;
+				document.getElementById("Q18").value=$scope.info.Q18;
+				document.getElementById("consent").value=$scope.info.consent;
 			}
 			else{
 				document.getElementById("firstname").value="";
 				document.getElementById("lastname").value="";
+				document.getElementById("subjectid").value="";
 				document.getElementById("sex").value="";
-				document.getElementById("dob").value="";
+				document.getElementById("age").value="";
 				document.getElementById("occupation").value="";
 				document.getElementById("residence").value="";
+				document.getElementById("country").value="";
 				document.getElementById("ethnicity").value="";
 				document.getElementById("ses").value="";
 				document.getElementById("hearinghistory").value="";
-				document.getElementById("authistory").value="";
 				document.getElementById("hunting").value="";
 				document.getElementById("area").value="";
+				document.getElementById("currconditions").value="";
+				document.getElementById("currmeds").value="";
 				document.getElementById("Q1").value="";
 				document.getElementById("Q2").value="";
 				document.getElementById("Q3").value="";
@@ -303,6 +302,14 @@ $ionicPlatform.ready(function(){
 				document.getElementById("Q10").value="";
 				document.getElementById("Q11").value="";
 				document.getElementById("Q12").value="";
+				document.getElementById("Q13").value="";
+				document.getElementById("Q14").value="";
+				document.getElementById("Q15").value="";
+				document.getElementById("Q16").value="";
+				document.getElementById("Q17").value="";
+				document.getElementById("Q18").value="";
+				document.getElementById("consent").value="";
+
 				
 				if($localStorage.names){
 					document.getElementById("firstname").value=$localStorage.names[0];
@@ -316,16 +323,20 @@ $ionicPlatform.ready(function(){
 			{
 				firstname: document.getElementById("firstname").value, 
 				lastname: document.getElementById("lastname").value,
+				subjectid: document.getElementById("subjectid").value,
 				sex: document.getElementById("sex").value,
-				dob: document.getElementById("dob").value,
+				age: document.getElementById("age").value,
+				email: document.getElementById("email").value,
 				occupation: document.getElementById("occupation").value,
 				residence: document.getElementById("residence").value,
+				country: document.getElementById("country").value,
 				ethnicity: document.getElementById("ethnicity").value,
 				ses: document.getElementById("ses").value,
 				hearinghistory: document.getElementById("hearinghistory").value,
-				authistory: document.getElementById("authistory").value,
 				hunting: document.getElementById("hunting").value,
 				area: document.getElementById("area").value,
+				currconditions: document.getElementById("currconditions").value,
+				currmeds: document.getElementById("currmeds").value,
 				Q1: document.getElementById("Q1").value,
 				Q2: document.getElementById("Q2").value,
 				Q3: document.getElementById("Q3").value,
@@ -337,7 +348,15 @@ $ionicPlatform.ready(function(){
 				Q9: document.getElementById("Q9").value,
 				Q10: document.getElementById("Q10").value,
 				Q11: document.getElementById("Q11").value,
-				Q12: document.getElementById("Q12").value
+				Q12: document.getElementById("Q12").value,
+				Q13: document.getElementById("Q13").value,
+				Q14: document.getElementById("Q14").value,
+				Q15: document.getElementById("Q15").value,
+				Q16: document.getElementById("Q16").value,
+				Q17: document.getElementById("Q17").value,
+				Q18: document.getElementById("Q18").value,
+				consent: document.getElementById("consent").value
+
 			});
 		$state.go('mainmenu');
 	};
@@ -405,11 +424,19 @@ $ionicPlatform.ready(function(){
 .controller('SchedulerCtrl', function($scope,$state,$ionicPlatform,$window){
 	$scope.getTestDate=function(){
 		$ionicPlatform.ready(function(){
-				window.plugins.calendar.findEvent('HearMe Test',null,null,new Date(Date.now()+86400000*$scope.i),new Date(Date.now()+86400000*$scope.i),function(result){
+				if(ionic.Platform.isIOS()){
+					var off = -1;
+				}
+				else{
+					var off = 0;
+				}
+				window.plugins.calendar.findEvent('HearMe Test',null,null,new Date(Date.now()+86400000*$scope.i),new Date(Date.now()+86400000*($scope.i+off)),function(result){
 					if(result[0]){
 						var testDate = new Date(Date.parse(result[0].startDate)+86400000).toLocaleDateString();
 						console.log(testDate);
-						$scope.testDates.tds.push(testDate);
+						if(testDate != "Invalid Date"){
+							$scope.testDates.tds.push(testDate);
+						}
 						$scope.$apply();
 						console.log($scope.testDates.tds);
 					}
@@ -438,12 +465,14 @@ $ionicPlatform.ready(function(){
 				if(ionic.Platform.isAndroid()){
 					$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000+86400000);
 					$scope.date=new Date(Date.parse($scope.startDate)-86400000);
+					var endDate = new Date(Date.parse($scope.startDate));
 				}
 				if(ionic.Platform.isIOS()){
 					$scope.startDate=new Date(Date.parse($scope.startDate)+offset*60000);
 					$scope.date=new Date(Date.parse($scope.startDate));
+					var endDate = new Date(Date.parse($scope.startDate)+86400000);
 				}
-				var endDate = new Date(Date.parse($scope.startDate));
+				
 				if(ionic.Platform.isIOS()||ionic.Platform.isAndroid()){
 					window.plugins.calendar.createEventInteractively("HearMe Test","HearMe App","Test your hearing in the HearMe app.",$scope.startDate,endDate,function(){
 						$scope.getTestDates();

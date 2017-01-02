@@ -21,6 +21,7 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 })
 
 .controller('InstructionsCtrl',function($scope,$state,$localStorage){
+	$scope.media=0;
 	$scope.startTest=function(){
 		$scope.media.pause();
 		$localStorage.noiseType = document.getElementById("noiseType").value;
