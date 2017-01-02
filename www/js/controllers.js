@@ -45,7 +45,9 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 	
 	};
 	$scope.returnToMain=function(){
+		if($scope.media){
 		$scope.media.pause();
+	}
 		$state.go('mainmenu');
 	};
 })
