@@ -11,8 +11,8 @@
 	</label>
 	<h4 class="text-left calm" style="font-size:20px" ng-if="successMessage">Scheduled test on {{ successMessage }}</h4>
   	<div ng-if="!successMessage" style="height:35px"></div>
-	<button class="button button-calm button-full" ng-click="scheduleTest()">Schedule</button>
-	<button class="button button-calm button-full" ng-click="goToCalendar()">Open Calendar</button>
+	<button class="button button-calm button-block icon icon-right ion-edit" ng-click="scheduleTest()">Schedule Reminder</button>
+	<button class="button button-calm button-block icon icon-right ion-calendar" ng-click="goToCalendar()">Open Calendar</button>
 	<div style="height:20px";></div>
 	<center>
 		<h4><u>Future Scheduled Tests</u></h2>
