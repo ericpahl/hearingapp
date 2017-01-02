@@ -8,23 +8,24 @@ On a device or emulator (iOS or Android), the user will be redirected to an in-a
 After logging in the user will be directed to the application’s main menu. The menu has 4 options.
 
 1.3 Start Test
-If the user presses start test, the hearing test will begin. 
+If the user presses start test, an instructions page will show up that explains what the user will be doing and responding to during the test. The user is also asked to listen to noise (by pressing the microphone icon), and adjust the volume of the device to a comfortable hearing level. The user can also select which simulated noise they use to test their hearing (white noise, restaurant, car, train, subway, exhibition, airport, babble, etc.)
+The hearing test will then begin. 
 Tapping the play button will play a random sequence of 3 digits (not zero or seven) of varying signal-to-noise ratios. 
 The user can guess the digits by entering a number in each of the inputs below the play button and pressing submit. 
-If the user is correct, the next sequence presented will be of a lower signal-to-noise ratio 
-If the user is incorrect, the next sequence will be of a higher signal-to-noise ratio. This will continue for 24 sequences.
+If the user is correct, the next sequence presented will be of a lower signal-to-noise ratio (i.e. harder to hear)
+If the user is incorrect, the next sequence will be of a higher signal-to-noise ratio (i.e. easier to hear). This will continue for 24 sequences.
 After the submitting a guess for the 24th sequence, the user will be taken to the result page for the test which will display their hearing threshold.
 The test result will be stored in the firebase database.
 The user may cancel the test at any time by tapping the home icon in the upper left corner, which will take them to the main menu.
 
 1.4 View Past Results
 If the user presses View Past Results, they will be taken to a view that shows the overall trend of all of their test results and will list each result by date.
-If the user taps one of the listed results, they will be taken to the result page for that test.
+If the user taps one of the listed results, they will be taken to the result page for that test which lists their hearing threshold, the type of noise used, and a chart that shows the exact sequence and progression of correct and incorrect responses during the test.
 The results are tied to the user’s account through firebase and will persist if the user logs out or logs in on another device.
 The user can return to the main menu by tapping the home icon.
 
 1.5 Update Information
-Tapping update information will take the user to a view which contains information such as sex and birth date.
+Tapping update information will take the user to a view which contains information such as sex and birth date, as well as a clinically-established survey for hearing loss.
 This information is tied to the user’s account through firebase and will persist if the user logs out or logs in on another device.
 The user can update their information by editing the fields and pressing save.
 Tapping sign out will log the user out and will redirect the user to the login page.
@@ -40,7 +41,7 @@ The user can return to the main menu by tapping the home icon.
 2. Supported Devices
 
 2.1 Devices and Emulators
-The app has been tested on both iOS and Android emulators. All functionality works in both emulators. 
+The app has been tested on both iOS and Android emulators, and devices. All functionality works in both emulators and devices. 
 
 2.2 Browser
 All functionality works in the Chrome browser except for the scheduling feature. 
@@ -63,6 +64,7 @@ For further reference about the test we are trying to implement, see the followi
 
 5. Updates in this version
 -Added an instructions page before the test begins which also allows the user to adjust their volume after playing a test sound
+-Added the option to test in different noises (babble, airport, train, car, etc.)
 -Added the ability to log in using Facebook
 -Changed the set up of the audio files so playback is more consistent during the test
 -Fixed bugs related to storing past test results

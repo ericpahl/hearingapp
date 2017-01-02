@@ -8,15 +8,17 @@
   <div ng-if="!provider">
   <div style="height:20px"></div>
   <h2>You are about to start a hearing test.</h2>
-  <p>The test consists of sequences of three digits spoken over background noise. You will guess which digits are spoken in each sequence. The signal-to-noise of the sequences will increase and decrease based on the correctness of your answers. There will be 24 sequences in the test.</p>
+  <h4> You can stop the test at anytime by pressing the home button at the upper left corner of the screen to take you back to the main menu, or the home button on your phone to exit the app. An incomplete test will not be saved.</h4>
+  <h4>The test consists of sequences (24 total) of three digits spoken over background noise. You will determine which digits are spoken in each sequence (that is, how well can you 'hear me'). The signal-to-noise ratio of the sequences will increase and decrease according to your incorrect and correct responses respectively. At higher, more positive signal-to-noise ratios, digits are easier to hear compared to lower, more negative signal-to-noise ratios.</h4>
   <div style="height:20px"></div>
   <div class="row">
-  <div class="col"><h4>Press the button to play a test noise. Adjust the volume on your phone so that you can comfortably hear the noise.</h4></div>
+  <div class="col"><h4>Before starting the test, you must press the button (right) to play a sample noise. Adjust the volume on your phone so that you can comfortably hear the noise.</h4></div>
   <div class="col"><button class="button button-icon ion-volume-high speakerbutton" ng-click="playSound()"></button></div>
   </div>
   
 <div style="height:20px"></div>
-<h4>When the volume is at a comfortable level, press the button below to start the test in any of the simulated noises/environments listed.</h4>
+<h4>When the volume is at a comfortable level, press the button below to start the test in any of the simulated noises/environments listed (note: white noise is recommended to measure your most reliable and accurate performance). </h4>
+<h4>After completing the test, you will be provided with your speech reception threshold (a signal-to-noise hearing threshold in decibels). Be sure to update your information, compare your performance to past results, and schedule a calendar reminder for your future test.</h4>
 <div style="height:20px"></div>
 </center>
 <div class="list">
@@ -37,6 +39,6 @@
       </label>
     </div>
     </div>
-  <ion-button class="button button-full button-calm" ng-click="startTest()">Begin Test</ion-button>
+  <ion-button class="button button-calm button-block icon icon-right ion-play" ng-click="startTest()">Begin Test</ion-button>
   </ion-content>
 </ion-view>
