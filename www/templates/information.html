@@ -4,8 +4,10 @@
       <button class = "button button-icon icon ion-home" ng-click="returnToMain()"></button>
       <h1 class = "title">Information</h1>
   </div>
-  <div style="height:40px"></div>
+  <div style="height:20px"></div>
+  <h4>Please take the time to answer the following questions. This screening information will only be used for research purposes related to hearing loss.</h4>
 
+  <div style="height:40px"></div>
   <div class="list">
     <label class="item item-input">
       <span class="input-label"><h2>First Name:</h2></span>
@@ -15,26 +17,150 @@
       <span class="input-label"><h2>Last Name:</h2></span>
       <input id="lastname" type="text">
     </label>
-      <label class="item item-input">
-      <span class="input-label"><h2>Date of Birth:</h2></span>
-      <input id="dob" type="date"></input>
-    </label>
     <label class="item item-input">
-      <span class="input-label"><h2>Occupation:          </h2></span>
-      <input id="occupation" type="text">
-    </label>
-    <label class="item item-input">
-      <span class="input-label"><h2>City of Residence:          </h2></span>
-      <input id="residence" type="text">
-    </label>
-    <label class="item item-input">
-      <span class="input-label"><h2>Ethnicity:           </h2></span>
-      <input id="ethnicity" type="text">
+      <span class="input-label"><h2>Subject ID:</h2></span>
+      <input id="subjectid" type="text">
     </label>
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h2> Sex: </h2>
+          <h2> Age: </h2>
+        <select id="age">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+          <option>6</option>
+          <option>7</option>
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+          <option>13</option>
+          <option>14</option>
+          <option>15</option>
+          <option>16</option>
+          <option>17</option>
+          <option>18</option>
+          <option>19</option>
+          <option>20</option>
+          <option>21</option>
+          <option>22</option>
+          <option>23</option>
+          <option>24</option>
+          <option>25</option>
+          <option>26</option>
+          <option>27</option>
+          <option>28</option>
+          <option>29</option>
+          <option>30</option>
+          <option>31</option>
+          <option>32</option>
+          <option>33</option>
+          <option>34</option>
+          <option>35</option>
+          <option>36</option>
+          <option>37</option>
+          <option>38</option>
+          <option>39</option>
+          <option>40</option>
+          <option>41</option>
+          <option>42</option>
+          <option>43</option>
+          <option>44</option>
+          <option>45</option>
+          <option>46</option>
+          <option>47</option>
+          <option>48</option>
+          <option>49</option>
+          <option>50</option>
+          <option>51</option>
+          <option>52</option>
+          <option>53</option>
+          <option>54</option>
+          <option>55</option>
+          <option>56</option>
+          <option>57</option>
+          <option>58</option>
+          <option>59</option>
+          <option>60</option>
+          <option>61</option>
+          <option>62</option>
+          <option>63</option>
+          <option>64</option>
+          <option>65</option>
+          <option>66</option>
+          <option>67</option>
+          <option>68</option>
+          <option>69</option>
+          <option>70</option>
+          <option>71</option>
+          <option>72</option>
+          <option>73</option>
+          <option>74</option>
+          <option>75</option>
+          <option>76</option>
+          <option>77</option>
+          <option>78</option>
+          <option>79</option>
+          <option>80</option>
+          <option>81</option>
+          <option>82</option>
+          <option>83</option>
+          <option>84</option>
+          <option>85</option>
+          <option>86</option>
+          <option>87</option>
+          <option>88</option>
+          <option>89</option>
+          <option>90</option>
+          <option>91</option>
+          <option>92</option>
+          <option>93</option>
+          <option>94</option>
+          <option>95</option>
+          <option>96</option>
+          <option>97</option>
+          <option>98</option>
+          <option>99</option>
+          <option>100</option>
+          <option>101</option>
+          <option>102</option>
+          <option>103</option>
+          <option>104</option>
+          <option>105</option>
+          <option>106</option>
+          <option>107</option>
+          <option>108</option>
+          <option>109</option>
+          <option>110</option>
+        </select>
+      </label>
+    </div>
+    </div>
+    <label class="item item-input">
+      <span class="input-label"><h2>Primary Email: </h2></span>
+      <input id="email" type="text">
+    </label>
+    <label class="item item-input">
+      <span class="input-label"><h2>Occupation: </h2></span>
+      <input id="occupation" type="text">
+    </label>
+    <label class="item item-input">
+      <span class="input-label"><h2>City, State of Residence: </h2></span>
+      <input id="residence" type="text">
+    </label>
+    <label class="item item-input">
+      <span class="input-label"><h2>Country: </h2></span>
+      <input id="country" type="text">
+    </label>
+
+    <div class="list">
+      <label  class="item item-input item-select">
+        <div class="input-label">
+          <h2> Biological Sex: </h2>
         <select id="sex">
           <option>Male</option>
           <option>Female</option>
@@ -45,11 +171,42 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h2> Socioeconomic Status: </h2>
+          <h2> Ethnicity: </h2>
+        <select id="ethnicity">
+          <option>Caucasian</option>
+          <option>Black</option>
+          <option>Asian</option>
+          <option>Native American</option>
+          <option>Latino</option>
+          <option>Pacific Islander</option>
+          <option>Middle Eastern</option>
+          <option>Other</option>
+        </select>
+      </label>
+    </div>
+    </div>
+
+    <label class="item item-input">
+      <span class="input-label"><h3>Current Diagnosed <br/> Medical Conditions: </h3></span>
+      <input id="currconditions" type="text">
+    </label>
+
+    <label class="item item-input">
+      <span class="input-label"><h3>Current Medications: </h3></span>
+      <input id="currmeds" type="text">
+    </label>
+
+
+    <div class="list">
+      <label  class="item item-input item-select">
+        <div class="input-label">
+          <h3> Annual Family <br/> Income: </h3>
         <select id="ses">
-          <option>Low</option>
-          <option>Medium</option>
-          <option>High</option>
+          <option>$25k or Less</option>
+          <option>$25k-$50k</option>
+          <option>$50k-$75k</option>
+          <option>$75k-$100k</option>
+          <option>$100k or Above</option>
         </select>
       </label>
     </div>
@@ -65,20 +222,10 @@
       </label>
     </div>
     </div>
-        <div class="list">
-      <label  class="item item-input item-select">
-        <div class="input-label"> <h3> Family History of Autism: </h3>
-        <select id="authistory">
-          <option>Yes</option>
-          <option>No</option>
-        </select>
-      </label>
-    </div>
-    </div>
 
     <div class="list">
       <label  class="item item-input item-select">
-        <div class="input-label"> <h3> Go Hunting Occasionally: </h3>
+        <div class="input-label"> <h3> Do you go hunting cccasionally? </h3>
         <select id="hunting">
           <option>Yes</option>
           <option>No</option>
@@ -90,7 +237,7 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label"> <h3>
-          Live in a Rural or Urban Area:</h3>
+          Do you live in a <br/> Rural or Urban Area?</h3>
         <select id="area">
           <option>Rural</option>
           <option>Urban</option>
@@ -98,6 +245,50 @@
       </label>
     </div>
     </div>
+
+    <div class="list">
+      <label  class="item item-input item-select">
+        <div class="input-label">
+          <h4>I listen to loud <br/> music frequently:</h4>
+        <select id="Q16">
+          <option>Strongly Disagree</option>
+          <option>Moderately Disagree</option>
+          <option>No Opinion</option>
+          <option>Moderarely Agree</option>
+          <option>Strongly Agree</option>
+        </select>
+      </label>
+    </div>
+    </div>
+
+    <div class="list">
+      <label  class="item item-input item-select">
+        <div class="input-label">
+          <h4>I attend loud <br/> concerts <br/> occasionally:</h4>
+        <select id="Q17">
+          <option>Strongly Disagree</option>
+          <option>Moderately Disagree</option>
+          <option>No Opinion</option>
+          <option>Moderarely Agree</option>
+          <option>Strongly Agree</option>
+        </select>
+      </label>
+    </div>
+    </div>
+
+    <div class="list">
+      <label  class="item item-input item-select">
+        <div class="input-label">
+          <h4>I have served in the military:</h4>
+        <select id="Q18">
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </label>
+    </div>
+    </div>
+
+    <h4>The following questions are based on the Better Hearing Institute (BHI) Quick Hearing Check and the American Academy of Otolaryngology-Head and Neck Surgery (AAO-HNS) five-minute hearing test.</h4>
 
     <div class="list">
       <label  class="item item-input item-select">
@@ -114,11 +305,10 @@
     </div>
     </div>
 
-
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h4>I have trouble <br/> understanding <br/> things on TV:</h4>
+          <h4>I have trouble <br/> following the <br/> conversation <br/> when two or more <br/> people are talking <br/> at the same time: </h4>
         <select id="Q2">
           <option>Strongly Disagree</option>
           <option>Moderately Disagree</option>
@@ -133,7 +323,7 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h4>I have to strain to <br/> understand <br/> conversations:</h4>
+          <h4>I have trouble <br/> understanding <br/> things on TV:</h4>
         <select id="Q3">
           <option>Strongly Disagree</option>
           <option>Moderately Disagree</option>
@@ -148,7 +338,7 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h4>I have trouble <br /> hearing speech <br /> in a noisy area:</h4>
+          <h4>I have to strain to <br/> understand <br/> conversations:</h4>
         <select id="Q4">
           <option>Strongly Disagree</option>
           <option>Moderately Disagree</option>
@@ -163,7 +353,7 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h4>I avoid social <br /> activities because <br / >I can't hear well:</h4>
+          <h4>I have to worry <br/> about missing a <br/> telephone ring or <br/> doorbell:</h4>
         <select id="Q5">
           <option>Strongly Disagree</option>
           <option>Moderately Disagree</option>
@@ -178,7 +368,7 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h4>Many people I <br/> talk to seem <br/> to mumble:</h4>
+          <h4>I have trouble <br /> hearing dialogue <br /> in a noisy <br/> background such <br/> as a crowded <br/> room or <br/>restaurant:</h4>
         <select id="Q6">
           <option>Strongly Disagree</option>
           <option>Moderately Disagree</option>
@@ -193,7 +383,7 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h4>I have trouble <br/> hearing women and <br/> children speak:</h4>
+          <h4>I get confused <br/> about where <br/> sounds come <br/>from:</h4>
         <select id="Q7">
           <option>Strongly Disagree</option>
           <option>Moderately Disagree</option>
@@ -208,7 +398,7 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h4>I struggle to hear <br/> speech in a <br/> large room:</h4>
+          <h4>I misunderstand <br/> some words in a <br/> sentence and <br/> need people to <br/> repeat themselves:</h4>
         <select id="Q8">
           <option>Strongly Disagree</option>
           <option>Moderately Disagree</option>
@@ -223,7 +413,7 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h4>I often need to ask <br/> people to repeat <br/> themselves:</h4>
+          <h4>I especially <br/> have trouble <br/> understanding the <br/> speech of women <br/> and children: </h4>
         <select id="Q9">
           <option>Strongly Disagree</option>
           <option>Moderately Disagree</option>
@@ -238,7 +428,7 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h4>I listen to loud <br/> music frequently:</h4>
+          <h4>I have trouble <br/> understanding the <br/> speaker in a <br/> large room such <br/> as at a meeting <br/> or place of <br/> worship: </h4>
         <select id="Q10">
           <option>Strongly Disagree</option>
           <option>Moderately Disagree</option>
@@ -253,8 +443,24 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h4>I attend loud <br/> concerts <br/> occasionally:</h4>
+          <h4>Many people I <br/> talk to seem to <br/> mumble or don't <br/> speak clearly: </h4>
         <select id="Q11">
+          <option>Strongly Disagree</option>
+          <option>Moderately Disagree</option>
+          <option>No Opinion</option>
+          <option>Moderarely Agree</option>
+          <option>Strongly Agree</option>
+        </select>
+      </label>
+    </div>
+    </div>
+
+
+    <div class="list">
+      <label  class="item item-input item-select">
+        <div class="input-label">
+          <h4>People get <br/> annoyed because <br/> I misunderstand <br/> what they say:</h4>
+        <select id="Q12">
           <option>Strongly Disagree</option>
           <option>Moderately Disagree</option>
           <option>No Opinion</option>
@@ -268,8 +474,56 @@
     <div class="list">
       <label  class="item item-input item-select">
         <div class="input-label">
-          <h4>I have served in the military:</h4>
-        <select id="Q12">
+          <h4>I misunderstand <br/> what others are <br/> saying and make <br/> inappropriate <br/> responses:</h4>
+        <select id="Q13">
+          <option>Strongly Disagree</option>
+          <option>Moderately Disagree</option>
+          <option>No Opinion</option>
+          <option>Moderarely Agree</option>
+          <option>Strongly Agree</option>
+        </select>
+      </label>
+    </div>
+    </div>
+
+    <div class="list">
+      <label  class="item item-input item-select">
+        <div class="input-label">
+          <h4>I avoid social <br/> activities because I <br/> cannot hear well <br/> and fear I will <br/> reply improperly:</h4>
+        <select id="Q14">
+          <option>Strongly Disagree</option>
+          <option>Moderately Disagree</option>
+          <option>No Opinion</option>
+          <option>Moderarely Agree</option>
+          <option>Strongly Agree</option>
+        </select>
+      </label>
+    </div>
+    </div>
+
+    <div class="list">
+      <label  class="item item-input item-select">
+        <div class="input-label">
+          <h4>Family members <br/> and friends have <br/> told me they think <br/> I may have a <br/> hearing loss:</h4>
+        <select id="Q15">
+          <option>Strongly Disagree</option>
+          <option>Moderately Disagree</option>
+          <option>No Opinion</option>
+          <option>Moderarely Agree</option>
+          <option>Strongly Agree</option>
+        </select>
+      </label>
+    </div>
+    </div>
+
+    <div style="height:20px"></div>
+    <h4>Consent for Release of Information.</h4>
+
+    <div class="list">
+      <label  class="item item-input item-select">
+        <div class="input-label">
+          <h4>I consent and allow my <br/> deidentified data to be <br/> used for research purposes:</h4>
+        <select id="consent">
           <option>Yes</option>
           <option>No</option>
         </select>
@@ -277,7 +531,7 @@
     </div>
     </div>
   <center>
-    <button class="button button-calm button-block" ng-click="saveInfo()">Save</button>
-    <button class="button button-calm button-block" ng-click="logOut()">Sign Out</button>
+    <button class="button button-calm button-block icon icon-right ion-checkmark" ng-click="saveInfo()">Save</button>
+    <button class="button button-calm button-block icon icon-right ion-android-exit" ng-click="logOut()">Sign Out</button>
   </center>
 </ion-content>
