@@ -31,7 +31,7 @@
   <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
   <plugin name="cordova-plugin-calendar"/>
   <plugin name="cordova-plugin-googleplus" spec="https://github.com/EddyVerbruggen/cordova-plugin-googleplus">
-    <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.560989935668-v4qd4vmjhir5tac45oo63flogvurltuq"/>
+    <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.180218637488-sfrva8bmqe122pfc7t59v7sqi0jbgbml"/>
   </plugin>
   <platform name="android">
     <icon src="resources\android\icon\drawable-ldpi-icon.png" density="ldpi"/>
