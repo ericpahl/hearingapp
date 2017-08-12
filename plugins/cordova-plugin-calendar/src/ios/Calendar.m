@@ -153,7 +153,7 @@
 
       // Find matches
       if (calEventID != nil) {
-          theEvent = [self.eventStore calendarItemWithIdentifier:calEventID];
+          theEvent = (EKEvent *)[self.eventStore calendarItemWithIdentifier:calEventID];
       }
 
     if (theEvent == nil) {
@@ -338,10 +338,16 @@
 }
 
 - (EKCalendar*) findEKCalendar: (NSString *)calendarName {
-  for (EKCalendar *thisCalendar in [self.eventStore calendarsForEntityType:EKEntityTypeEvent]){
-    NSLog(@"Calendar: %@", thisCalendar.title);
-    if ([thisCalendar.title isEqualToString:calendarName]) {
-      return thisCalendar;
+  NSArray<EKCalendar *> *calendars = [self.eventStore calendarsForEntityType:EKEntityTypeEvent];
+  if (calendars != nil && calendars.count > 0) {
+    for (EKCalendar *thisCalendar in calendars) {
+      NSLog(@"Calendar: %@", thisCalendar.title);
+      if ([thisCalendar.title isEqualToString:calendarName]) {
+        return thisCalendar;
+      }
+      if ([thisCalendar.calendarIdentifier isEqualToString:calendarName]) {
+        return thisCalendar;
+      }
     }
   }
   NSLog(@"No match found for calendar with name: %@", calendarName);
@@ -408,7 +414,50 @@
     }
 
     if (event.recurrenceRules != nil) {
-      [entry setObject:event.recurrenceRules forKey:@"rrule"];
+      for (EKRecurrenceRule *rule in event.recurrenceRules) {
+        NSMutableDictionary *rrule = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
+            rule.calendarIdentifier, @"calendar", nil];
+
+        switch (rule.frequency) {
+          case EKRecurrenceFrequencyDaily:
+              [rrule setObject:@"daily" forKey:@"freq"];
+          break;
+
+          case EKRecurrenceFrequencyWeekly:
+              [rrule setObject:@"weekly" forKey:@"freq"];
+          break;
+
+          case EKRecurrenceFrequencyMonthly:
+              [rrule setObject:@"monthly" forKey:@"freq"];
+          break;
+
+          case EKRecurrenceFrequencyYearly:
+              [rrule setObject:@"yearly" forKey:@"freq"];
+          break;
+
+          default:
+              [rrule setObject:@"none" forKey:@"freq"];
+          break;
+        }
+
+        NSNumber *interval = [NSNumber numberWithInteger: rule.interval];
+        [rrule setObject:interval forKey:@"interval"];
+
+      if (rule.recurrenceEnd != nil) {
+        NSMutableDictionary *until = [[NSMutableDictionary alloc] init];
+
+        if (rule.recurrenceEnd.endDate != nil) {
+          [until setObject:[df stringFromDate:rule.recurrenceEnd.endDate] forKey:@"date"];
+        }
+
+      NSNumber *count = [NSNumber numberWithInteger: rule.recurrenceEnd.occurrenceCount];
+      [until setObject:count forKey:@"count"];
+
+        [rrule setObject:until forKey:@"until"];
+      }
+
+        [entry setObject:rrule forKey:@"rrule"];
+      }
     }
 
     [entry setObject:event.calendarItemIdentifier forKey:@"id"];
@@ -453,6 +502,32 @@
 }
 
 - (void) listEventsInRange:(CDVInvokedUrlCommand*)command {
+  NSDictionary* options = [command.arguments objectAtIndex:0];
+  NSNumber* startTime  = [options objectForKey:@"startTime"];
+  NSNumber* endTime    = [options objectForKey:@"endTime"];
+
+  [self.commandDelegate runInBackground: ^{
+      NSLog(@"listEventsInRange invoked");
+      NSTimeInterval _startInterval = [startTime doubleValue] / 1000; // strip millis
+      NSDate *startDate = [NSDate dateWithTimeIntervalSince1970:_startInterval];
+
+      NSTimeInterval _endInterval = [endTime doubleValue] / 1000; // strip millis
+      NSDate *endDate = [NSDate dateWithTimeIntervalSince1970:_endInterval];
+
+      NSLog(@"startDate: %@", startDate);
+      NSLog(@"endDate: %@", endDate);
+
+      CDVPluginResult *pluginResult = nil;
+
+      NSArray *calendarArray = nil;
+      NSPredicate *fetchCalendarEvents = [eventStore predicateForEventsWithStartDate:startDate endDate:endDate calendars:calendarArray];
+      NSArray *matchingEvents = [eventStore eventsMatchingPredicate:fetchCalendarEvents];
+      NSMutableArray * eventsDataArray = [self eventsToDataArray:matchingEvents];
+
+      pluginResult = [CDVPluginResult resultWithStatus: CDVCommandStatus_OK messageAsArray:eventsDataArray];
+
+      [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  }];  
 }
 
 - (void)createEventWithOptions:(CDVInvokedUrlCommand*)command {
@@ -772,7 +847,7 @@
     }
 
     // Find matches
-    EKCalendarItem *theEvent;
+    EKCalendarItem *theEvent = nil;
     if (calEventID != nil) {
       theEvent = [self.eventStore calendarItemWithIdentifier:calEventID];
     }

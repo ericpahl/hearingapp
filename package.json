@@ -3,6 +3,7 @@
   "version": "1.1.1",
   "description": "HearingApp: An Ionic project",
   "dependencies": {
+    "@ionic-native/media": "^4.1.0",
     "angular-chart.js": "^1.0.3",
     "chart.js": "^2.3.0",
     "gulp": "^3.5.6",

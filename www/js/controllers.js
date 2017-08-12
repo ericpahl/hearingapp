@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova','firebase','ngCordovaOauth'])
+angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova','firebase','ngCordovaOauth','ionic.native'])
 
 .controller('MainMenuCtrl', function($scope,$state,Auth,$localStorage){
 	$scope.startTest = function(){$state.go('instructions')};
@@ -21,7 +21,9 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 })
 
 .controller('InstructionsCtrl',function($scope,$state,$localStorage){
-	$scope.media=0;
+	if($scope.media){
+		$scope.media.pause();
+	}
 	$scope.startTest=function(){
 		$scope.media.pause();
 		$localStorage.noiseType = document.getElementById("noiseType").value;
@@ -36,13 +38,14 @@ angular.module('starter.controllers', ['ionic','chart.js','ngStorage','ngCordova
 				$scope.media=new Media(url,function onSuccess(){
 							$scope.media.release();
 						});
+				console.log("success");
 				$scope.media.play();
 			}
 			else{
 				$scope.media=new Audio(url);
 				$scope.media.play();
 			}
-		});
+		}).catch(function(error){console.log(error.message);});
 	
 	};
 	$scope.returnToMain=function(){
@@ -363,7 +366,11 @@ $ionicPlatform.ready(function(){
 	};
 })
 
-.controller('LoginCtrl',function($scope,$state,$cordovaOauth,$localStorage){
+.controller('LoginCtrl',function($scope,$state,$cordovaOauth,$localStorage,$cordovaGooglePlus){
+	if(firebase.auth().currentUser)
+	{
+		$state.go('mainmenu');
+	}
 	$scope.googleLogin=function(){
 
 		if(!firebase.auth().currentUser)
@@ -377,15 +384,26 @@ $ionicPlatform.ready(function(){
 						});
 	                }
 	                else{
-	                    $cordovaOauth.google("180218637488-t2or73169ubmhbk0or5r027ct86c1ghr.apps.googleusercontent.com",
-	                    	["email", "profile"]).then(function(result){
-	                    		var credential = firebase.auth.GoogleAuthProvider.credential(result.id_token,result.access_token);
+	                    $cordovaGooglePlus.login({'webClientId': '180218637488-t2or73169ubmhbk0or5r027ct86c1ghr.apps.googleusercontent.com'}).then(function(result){
+	                    		
+	                    		var credential = firebase.auth.GoogleAuthProvider.credential(result.idToken, result.accessToken);
+	                    		
 	                    		firebase.auth().signInWithCredential(credential);
 	                    		if(firebase.auth().currentUser){
 	                    			$state.go('mainmenu');
 	                    		}
-	                    	});
+	                    		else{
+	                    			$scope.failedLogin = "Invalid login credentials";
+	                    		}
+	                    	}, function(err) {
+      							console.log('error');
+      							console.log(err);
+   							 });
 	                }
+		}
+		else
+		{
+			$state.go('mainmenu');
 		}
 	};
 	$scope.facebookLogin=function(){
@@ -408,8 +426,12 @@ $ionicPlatform.ready(function(){
 	                    		$state.go('mainmenu');
 	                    	}
 	                });
-	                    }
-	                }
+	        }
+	    }
+	    else
+		{
+			$state.go('mainmenu');
+		}
 		
 	};
 	firebase.auth().onAuthStateChanged(function(user){

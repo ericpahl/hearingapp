@@ -7,60 +7,43 @@
         "files": {}
     },
     "installed_plugins": {
-        "at.gofg.sportscomputer.powermanagement": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
-        },
         "cordova-plugin-calendar": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+            "PACKAGE_NAME": "com.ionicframework.hearingapp"
         },
         "cordova-plugin-console": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
-        },
-        "cordova-plugin-crosswalk-webview": {
-            "XWALK_VERSION": "21+",
-            "XWALK_LITEVERSION": "xwalk_core_library_canary:17+",
-            "XWALK_COMMANDLINE": "--disable-pull-to-refresh-effect",
-            "XWALK_MODE": "embedded",
-            "XWALK_MULTIPLEAPK": "true",
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+            "PACKAGE_NAME": "com.ionicframework.hearingapp"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+            "PACKAGE_NAME": "com.ionicframework.hearingapp"
         },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
-        },
-        "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
-        },
-        "cordova-plugin-media": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
-        },
-        "cordova-plugin-nativeaudio": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+        "cordova-plugin-googleplus": {
+            "PACKAGE_NAME": "com.ionicframework.hearingapp"
         },
         "cordova-plugin-splashscreen": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+            "PACKAGE_NAME": "com.ionicframework.hearingapp"
         },
         "cordova-plugin-statusbar": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+            "PACKAGE_NAME": "com.ionicframework.hearingapp"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+            "PACKAGE_NAME": "com.ionicframework.hearingapp"
         },
         "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+            "PACKAGE_NAME": "com.ionicframework.hearingapp"
         },
-        "cordova-plugin-file-transfer": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+        "cordova-plugin-nativeaudio": {
+            "PACKAGE_NAME": "com.ionicframework.hearme"
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "com.ionicframework.hearme"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+            "PACKAGE_NAME": "com.ionicframework.hearingapp"
         },
         "cordova-plugin-file": {
-            "PACKAGE_NAME": "com.ionicframework.hearingapp583843"
+            "PACKAGE_NAME": "com.ionicframework.hearme"
         }
     }
 }
