@@ -230,10 +230,11 @@ $ionicPlatform.ready(function(){
 	});
 })
 
-.controller('InformationCtrl', function($scope,$state,$cordovaOauth,$localStorage){
+.controller('InformationCtrl', function($scope,$state,$cordovaOauth,$localStorage,$cordovaGooglePlus){
 	$scope.returnToMain = function(){$state.go('mainmenu')};
 	$scope.logOut=function(){
 		firebase.auth().signOut();
+		$cordovaGooglePlus.disconnect();
 		window.location="#/login";
 	};
 	firebase.auth().onAuthStateChanged(function(){
@@ -399,6 +400,7 @@ $ionicPlatform.ready(function(){
       							console.log('error');
       							console.log(err);
    							 });
+
 	                }
 		}
 		else

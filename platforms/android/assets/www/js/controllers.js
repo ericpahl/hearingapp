@@ -367,6 +367,10 @@ $ionicPlatform.ready(function(){
 })
 
 .controller('LoginCtrl',function($scope,$state,$cordovaOauth,$localStorage,$cordovaGooglePlus){
+	if(firebase.auth().currentUser)
+	{
+		$state.go('mainmenu');
+	}
 	$scope.googleLogin=function(){
 
 		if(!firebase.auth().currentUser)
@@ -395,7 +399,12 @@ $ionicPlatform.ready(function(){
       							console.log('error');
       							console.log(err);
    							 });
+	                    $cordovaGooglePlus.disconnect();
 	                }
+		}
+		else
+		{
+			$state.go('mainmenu');
 		}
 	};
 	$scope.facebookLogin=function(){
@@ -418,8 +427,12 @@ $ionicPlatform.ready(function(){
 	                    		$state.go('mainmenu');
 	                    	}
 	                });
-	                    }
-	                }
+	        }
+	    }
+	    else
+		{
+			$state.go('mainmenu');
+		}
 		
 	};
 	firebase.auth().onAuthStateChanged(function(user){
